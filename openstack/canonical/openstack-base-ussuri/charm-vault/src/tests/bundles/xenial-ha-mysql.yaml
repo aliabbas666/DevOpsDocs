@@ -1,0 +1,33 @@
+series: xenial
+services:
+  vault:
+    num_units: 3
+    series: xenial
+    charm: vault
+    options:
+        vip: 'ADD YOUR VIP HERE'
+  hacluster:
+    charm: cs:~openstack-charmers/hacluster
+  mysql:
+    charm: cs:~openstack-charmers/percona-cluster
+    num_units: 1
+  easyrsa:
+    charm: cs:~containers/easyrsa
+    num_units: 1
+  etcd:
+    # NOTE(ajkavanagh) using pinned etcd to work around
+    # https://bugs.launchpad.net/charm-etcd/+bug/1861483
+    #charm: cs:etcd
+    charm: cs:~containers/etcd-474
+    num_units: 3
+    options:
+      channel: 3.1/stable
+relations:
+- - vault:shared-db
+  - mysql:shared-db
+- - etcd:certificates
+  - easyrsa:client
+- - etcd:db
+  - vault:etcd
+- - vault:ha
+  - hacluster:ha

@@ -1,0 +1,174 @@
+openstack flavor create "ECS 1vCPU 4GB Linux 1Yr UpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 1vCPU 4GB WIN 1Yr UpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 1vCPU 4GB RedHat 1Yr UpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 2vCPU 8GB Linux 1Yr UpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 2vCPU 8GB WIN 1Yr UpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 2vCPU 8GB RedHat 1Yr UpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 4vCPU 16GB Linux 1Yr UpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 4vCPU 16GB WIN 1Yr UpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 4vCPU 16GB RedHat 1Yr UpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 1vCPU 2GB Linux 1Yr UpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 1vCPU 2GB WIN 1Yr UpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 1vCPU 2GB RedHat 1Yr UpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 2vCPU 4GB Linux 1Yr UpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 2vCPU 4GB WIN 1Yr UpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 2vCPU 4GB RedHat 1Yr UpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 4vCPU 8GB Linux 1Yr UpFront" --vcpus 4 --ram 8192
+openstack flavor create "ECS 4vCPU 8GB WIN 1Yr UpFront" --vcpus 4 --ram 8192
+openstack flavor create "ECS 4vCPU 8GB RedHat 1Yr UpFront" --vcpus 4 --ram 8192
+openstack flavor create "ECS 6vCPU 12GB Linux 1Yr UpFront" --vcpus 6 --ram 12288
+openstack flavor create "ECS 6vCPU 12GB WIN 1Yr UpFront" --vcpus 6 --ram 12288
+openstack flavor create "ECS 6vCPU 12GB RedHat 1Yr UpFront" --vcpus 6 --ram 12288
+openstack flavor create "ECS 8vCPU 16GB Linux 1Yr UpFront" --vcpus 8 --ram 16384
+openstack flavor create "ECS 8vCPU 16GB WIN 1Yr UpFront" --vcpus 8 --ram 16384
+openstack flavor create "ECS 8vCPU 16GB RedHat 1Yr UpFront" --vcpus 8 --ram 16384
+openstack flavor create "ECS 1vCPU 8GB Linux 1Yr UpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB WIN 1Yr UpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB RedHat 1Yr UpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 2vCPU 16GB Linux 1Yr UpFront" --vcpus 2 --ram 16384
+openstack flavor create "ECS 2vCPU 16GB WIN 1Yr UpFront" --vcpus 2 --ram 16384
+openstack flavor create "ECS 2vCPU 16GB RedHat 1Yr UpFront" --vcpus 2 --ram 16384
+openstack flavor create "ECS 4vCPU 32GB Linux 1Yr UpFront" --vcpus 4 --ram 32768
+openstack flavor create "ECS 4vCPU 32GB WIN 1Yr UpFront" --vcpus 4 --ram 32768
+openstack flavor create "ECS 4vCPU 32GB RedHat 1Yr UpFront" --vcpus 4 --ram 32768
+openstack flavor create "ECS 1vCPU 4GB Linux 1Yr NoUpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 1vCPU 4GB WIN 1Yr NoUpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 1vCPU 4GB RedHat 1Yr NoUpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 2vCPU 8GB Linux 1Yr NoUpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 2vCPU 8GB WIN 1Yr NoUpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 2vCPU 8GB RedHat 1Yr NoUpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 4vCPU 16GB Linux 1Yr NoUpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 4vCPU 16GB WIN 1Yr NoUpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 4vCPU 16GB RedHat 1Yr NoUpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 1vCPU 2GB Linux 1Yr NoUpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 1vCPU 2GB WIN 1Yr NoUpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 1vCPU 2GB RedHat 1Yr NoUpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 2vCPU 4GB Linux 1Yr NoUpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 2vCPU 4GB WIN 1Yr NoUpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 2vCPU 4GB RedHat 1Yr NoUpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 4vCPU 8GB Linux 1Yr NoUpFront" --vcpus 4 --ram 8192
+openstack flavor create "ECS 4vCPU 8GB WIN 1Yr NoUpFront" --vcpus 4 --ram 8192
+openstack flavor create "ECS 4vCPU 8GB RedHat 1Yr NoUpFront" --vcpus 4 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB Linux 1Yr NoUpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB WIN 1Yr NoUpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB RedHat 1Yr NoUpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 2vCPU 16GB Linux 1Yr NoUpFront" --vcpus 2 --ram 16384
+openstack flavor create "ECS 2vCPU 16GB WIN 1Yr NoUpFront" --vcpus 2 --ram 16384
+openstack flavor create "ECS 2vCPU 16GB RedHat 1Yr NoUpFront" --vcpus 2 --ram 16384
+openstack flavor create "ECS 4vCPU 32GB Linux 1Yr NoUpFront" --vcpus 4 --ram 32768
+openstack flavor create "ECS 4vCPU 32GB WIN 1Yr NoUpFront" --vcpus 4 --ram 32768
+openstack flavor create "ECS 4vCPU 32GB RedHat 1Yr NoUpFront" --vcpus 4 --ram 32768
+openstack flavor create "ECS 1vCPU 4GB Linux 1Yr PartUpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 1vCPU 4GB WIN 1Yr PartUpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 1vCPU 4GB RedHat 1Yr PartUpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 2vCPU 8GB Linux 1Yr PartUpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 2vCPU 8GB WIN 1Yr PartUpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 2vCPU 8GB RedHat 1Yr PartUpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 4vCPU 16GB Linux 1Yr PartUpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 4vCPU 16GB WIN 1Yr PartUpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 4vCPU 16GB RedHat 1Yr PartUpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 1vCPU 2GB Linux 1Yr PartUpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 1vCPU 2GB WIN 1Yr PartUpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 1vCPU 2GB RedHat 1Yr PartUpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 2vCPU 4GB Linux 1Yr PartUpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 2vCPU 4GB WIN 1Yr PartUpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 2vCPU 4GB RedHat 1Yr PartUpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 4vCPU 8GB Linux 1Yr PartUpFront" --vcpus 4 --ram 8192
+openstack flavor create "ECS 4vCPU 8GB WIN 1Yr PartUpFront" --vcpus 4 --ram 8192
+openstack flavor create "ECS 4vCPU 8GB RedHat 1Yr PartUpFront" --vcpus 4 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB Linux 1Yr PartUpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB WIN 1Yr PartUpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB RedHat 1Yr PartUpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 2vCPU 16GB Linux 1Yr PartUpFront" --vcpus 2 --ram 16384
+openstack flavor create "ECS 2vCPU 16GB WIN 1Yr PartUpFront" --vcpus 2 --ram 16384
+openstack flavor create "ECS 2vCPU 16GB RedHat 1Yr PartUpFront" --vcpus 2 --ram 16384
+openstack flavor create "ECS 4vCPU 32GB Linux 1Yr PartUpFront" --vcpus 4 --ram 32768
+openstack flavor create "ECS 4vCPU 32GB WIN 1Yr PartUpFront" --vcpus 4 --ram 32768
+openstack flavor create "ECS 4vCPU 32GB RedHat 1Yr PartUpFront" --vcpus 4 --ram 32768
+openstack flavor create "ECS 1vCPU 4GB Linux 3Yrs NoUpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 1vCPU 4GB WIN 3Yrs NoUpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 1vCPU 4GB RedHat 3Yrs NoUpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 2vCPU 8GB Linux 3Yrs NoUpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 2vCPU 8GB WIN 3Yrs NoUpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 2vCPU 8GB RedHat 3Yrs NoUpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 4vCPU 16GB Linux 3Yrs NoUpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 4vCPU 16GB WIN 3Yrs NoUpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 4vCPU 16GB RedHat 3Yrs NoUpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 1vCPU 2GB Linux 3Yrs NoUpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 1vCPU 2GB WIN 3Yrs NoUpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 1vCPU 2GB RedHat 3Yrs NoUpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 2vCPU 4GB Linux 3Yrs NoUpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 2vCPU 4GB WIN 3Yrs NoUpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 2vCPU 4GB RedHat 3Yrs NoUpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 4vCPU 8GB Linux 3Yrs NoUpFront" --vcpus 4 --ram 8192
+openstack flavor create "ECS 4vCPU 8GB WIN 3Yrs NoUpFront" --vcpus 4 --ram 8192
+openstack flavor create "ECS 4vCPU 8GB RedHat 3Yrs NoUpFront" --vcpus 4 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB Linux 3Yrs NoUpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB WIN 3Yrs NoUpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB RedHat 3Yrs NoUpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 1vCPU 4GB Linux 3Yrs PartUpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 1vCPU 4GB WIN 3Yrs PartUpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 1vCPU 4GB RedHat 3Yrs PartUpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 2vCPU 8GB Linux 3Yrs PartUpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 2vCPU 8GB WIN 3Yrs PartUpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 2vCPU 8GB RedHat 3Yrs PartUpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 4vCPU 16GB Linux 3Yrs PartUpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 4vCPU 16GB WIN 3Yrs PartUpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 4vCPU 16GB RedHat 3Yrs PartUpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 1vCPU 2GB Linux 3Yrs PartUpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 1vCPU 2GB WIN 3Yrs PartUpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 1vCPU 2GB RedHat 3Yrs PartUpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 2vCPU 4GB Linux 3Yrs PartUpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 2vCPU 4GB WIN 3Yrs PartUpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 2vCPU 4GB RedHat 3Yrs PartUpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 4vCPU 8GB Linux 3Yrs PartUpFront" --vcpus 4 --ram 8192
+openstack flavor create "ECS 4vCPU 8GB WIN 3Yrs PartUpFront" --vcpus 4 --ram 8192
+openstack flavor create "ECS 4vCPU 8GB RedHat 3Yrs PartUpFront" --vcpus 4 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB Linux 3Yrs PartUpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB WIN 3Yrs PartUpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB RedHat 3Yrs PartUpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 2vCPU 16GB Linux 3Yrs PartUpFront" --vcpus 2 --ram 16384
+openstack flavor create "ECS 2vCPU 16GB WIN 3Yrs PartUpFront" --vcpus 2 --ram 16384
+openstack flavor create "ECS 2vCPU 16GB RedHat 3Yrs PartUpFront" --vcpus 2 --ram 16384
+openstack flavor create "ECS 1vCPU 4GB Linux 3Yrs UpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 1vCPU 4GB WIN 3Yrs UpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 1vCPU 4GB RedHat 3Yrs UpFront" --vcpus 1 --ram 4096
+openstack flavor create "ECS 2vCPU 8GB Linux 3Yrs UpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 2vCPU 8GB WIN 3Yrs UpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 2vCPU 8GB RedHat 3Yrs UpFront" --vcpus 2 --ram 8192
+openstack flavor create "ECS 4vCPU 16GB Linux 3Yrs UpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 4vCPU 16GB WIN 3Yrs UpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 4vCPU 16GB RedHat 3Yrs UpFront" --vcpus 4 --ram 16384
+openstack flavor create "ECS 1vCPU 2GB Linux 3Yrs UpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 1vCPU 2GB WIN 3Yrs UpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 1vCPU 2GB RedHat 3Yrs UpFront" --vcpus 1 --ram 2048
+openstack flavor create "ECS 2vCPU 4GB Linux 3Yrs UpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 2vCPU 4GB WIN 3Yrs UpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 2vCPU 4GB RedHat 3Yrs UpFront" --vcpus 2 --ram 4096
+openstack flavor create "ECS 1vCPU 8GB Linux 3Yrs UpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB WIN 3Yrs UpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB RedHat 3Yrs UpFront" --vcpus 1 --ram 8192
+openstack flavor create "ECS 1vCPU 4GB Linux On-Demand" --vcpus 1 --ram 4096
+openstack flavor create "ECS 1vCPU 4GB WIN On-Demand" --vcpus 1 --ram 4096
+openstack flavor create "ECS 1vCPU 4GB RedHat On-Demand" --vcpus 1 --ram 4096
+openstack flavor create "ECS 2vCPU 8GB Linux On-Demand" --vcpus 2 --ram 8192
+openstack flavor create "ECS 2vCPU 8GB WIN On-Demand" --vcpus 2 --ram 8192
+openstack flavor create "ECS 2vCPU 8GB RedHat On-Demand" --vcpus 2 --ram 8192
+openstack flavor create "ECS 4vCPU 16GB Linux On-Demand" --vcpus 4 --ram 16384
+openstack flavor create "ECS 4vCPU 16GB WIN On-Demand" --vcpus 4 --ram 16384
+openstack flavor create "ECS 4vCPU 16GB RedHat On-Demand" --vcpus 4 --ram 16384
+openstack flavor create "ECS 1vCPU 2GB Linux On-Demand" --vcpus 1 --ram 2048
+openstack flavor create "ECS 1vCPU 2GB WIN On-Demand" --vcpus 1 --ram 2048
+openstack flavor create "ECS 1vCPU 2GB RedHat On-Demand" --vcpus 1 --ram 2048
+openstack flavor create "ECS 2vCPU 4GB Linux On-Demand" --vcpus 2 --ram 4096
+openstack flavor create "ECS 2vCPU 4GB WIN On-Demand" --vcpus 2 --ram 4096
+openstack flavor create "ECS 2vCPU 4GB RedHat On-Demand" --vcpus 2 --ram 4096
+openstack flavor create "ECS 4vCPU 8GB Linux On-Demand" --vcpus 4 --ram 8192
+openstack flavor create "ECS 4vCPU 8GB WIN On-Demand" --vcpus 4 --ram 8192
+openstack flavor create "ECS 4vCPU 8GB RedHat On-Demand" --vcpus 4 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB Linux On-Demand" --vcpus 1 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB WIN On-Demand" --vcpus 1 --ram 8192
+openstack flavor create "ECS 1vCPU 8GB RedHat On-Demand" --vcpus 1 --ram 8192
+openstack flavor create "ECS 2vCPU 4GB Linux On-Demand" --vcpus 2 --ram 4096
+openstack flavor create "ECS 2vCPU 4GB WIN On-Demand" --vcpus 2 --ram 4096
+openstack flavor create "ECS 2vCPU 4GB RedHat On-Demand" --vcpus 2 --ram 4096

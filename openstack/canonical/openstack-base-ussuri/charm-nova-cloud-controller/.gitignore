@@ -1,0 +1,14 @@
+bin
+.coverage
+.testrepository
+.tox
+tags
+*.sw[nop]
+*.pyc
+.unit-state.db
+trusty/
+xenial/
+tests/cirros-*-disk.img
+func*.json
+.stestr
+__pycache__

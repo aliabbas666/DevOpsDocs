@@ -1,0 +1,28 @@
+charm_name: ceph-osd
+gate_bundles:
+  - groovy-victoria
+  - focal-victoria
+  - focal-ussuri
+  - bionic-ussuri
+  - bionic-train
+  - bionic-stein
+  - bionic-rocky
+  - bionic-queens
+  - xenial-queens
+  - xenial-pike
+  - xenial-ocata
+  - xenial-mitaka
+  - trusty-mitaka
+smoke_bundles:
+  - bionic-train
+configure:
+  - zaza.openstack.charm_tests.glance.setup.add_lts_image
+tests:
+  - zaza.openstack.charm_tests.ceph.tests.CephLowLevelTest
+  - zaza.openstack.charm_tests.ceph.tests.CephRelationTest
+  - zaza.openstack.charm_tests.ceph.tests.CephTest
+  - zaza.openstack.charm_tests.ceph.osd.tests.SecurityTest
+  - zaza.openstack.charm_tests.ceph.osd.tests.ServiceTest
+tests_options:
+  force_deploy:
+    - groovy-victoria

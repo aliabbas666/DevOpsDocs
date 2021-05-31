@@ -1,0 +1,146 @@
+useradd stack
+passwd stack
+echo "stack ALL=(root) NOPASSWD:ALL" | tee -a /etc/sudoers.d/stack
+chmod 0440 /etc/sudoers.d/stack
+
+sudo hostnamectl set-hostname director.localdomain
+sudo hostnamectl set-hostname --transient director.localdomain
+sudo echo "127.0.0.1 director.localdomain" >> /etc/hosts
+
+sudo subscription-manager register --username redhat-detcon --password "Bei[g:(M3(kn123"
+sudo subscription-manager list --available --all --matches="Red Hat OpenStack"
+sudo subscription-manager attach --pool=8a85f99a742745340174439cd73d6164
+sudo subscription-manager release --set=8.2
+
+sudo dnf install -y  https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+sudo dnf install byobu vim -y
+sudo dnf remove epel-release -y
+
+sudo dnf install -y dnf-utils
+sudo subscription-manager repos --disable=*
+sudo subscription-manager repos \
+--enable=rhel-8-for-x86_64-baseos-rpms \
+--enable=rhel-8-for-x86_64-appstream-rpms \
+--enable=rhel-8-for-x86_64-highavailability-rpms \
+--enable=ansible-2.8-for-rhel-8-x86_64-rpms \
+--enable=openstack-15-for-rhel-8-x86_64-rpms \
+--enable=fast-datapath-for-rhel-8-x86_64-rpms
+
+sudo dnf install -y python3-tripleoclient
+
+openstack tripleo container image prepare default --output-env-file $HOME/containers-prepare-parameters.yaml
+cat <<EOF >> $HOME/containers-prepare-parameters.yaml
+  ContainerImageRegistryCredentials:
+    registry.redhat.io:
+      redhat-detcon: Bei[g:(M3(kn123
+  ContainerImageRegistryLogin: true
+EOF
+
+export IP=192.168.24.2
+export NETMASK=24
+export INTERFACE=ens224
+cat <<EOF > $HOME/standalone_parameters.yaml
+parameter_defaults:
+  CloudName: $IP
+  ControlPlaneStaticRoutes: []
+  Debug: true
+  DeploymentUser: $USER
+  DnsServers:
+    - 1.1.1.1
+    - 8.8.8.8
+  DockerInsecureRegistryAddress:
+    - $IP:8787
+  NeutronPublicInterface: $INTERFACE
+  NeutronDnsDomain: localdomain
+  NeutronBridgeMappings: datacentre:br-ctlplane
+  NeutronPhysicalBridge: br-ctlplane
+  StandaloneEnableRoutedNetworks: false
+  StandaloneHomeDir: $HOME
+  StandaloneLocalMtu: 1500
+  StandaloneExtraConfig:
+	  	NovaComputeLibvirtType: kvm
+EOF
+
+sudo dnf update -y
+sudo reboot
+
+sudo podman login registry.redhat.io --username redhat-detcon --password "Bei[g:(M3(kn123"
+export IP=10.81.1.81
+export NETMASK=24
+export INTERFACE=ens192
+
+#this one throw and error of Neutron
+sudo openstack tripleo deploy \
+  --templates \
+  --local-ip=$IP/$NETMASK \
+  -e /usr/share/openstack-tripleo-heat-templates/environments/standalone/standalone-tripleo.yaml \
+  -r /usr/share/openstack-tripleo-heat-templates/roles/Standalone.yaml \
+  -e $HOME/containers-prepare-parameters.yaml \
+  -e $HOME/standalone_parameters.yaml \
+  -e $HOME/tripleo-heat-installer-templates/environments/network-environment.yaml \
+	-e $HOME/tripleo-heat-installer-templates/environments/network-isolation.yaml \
+  --output-dir $HOME \
+  --standalone
+
+#This works fine
+sudo openstack tripleo deploy \
+  --templates \
+  --local-ip=$IP/$NETMASK \
+  -e /usr/share/openstack-tripleo-heat-templates/environments/standalone/standalone-tripleo.yaml \
+  -r /usr/share/openstack-tripleo-heat-templates/roles/Standalone.yaml \
+  -e $HOME/containers-prepare-parameters.yaml \
+  -e $HOME/standalone_parameters.yaml \
+  --output-dir $HOME \
+  --standalone
+
+
+
+[Iface1 = Management]
+[Iface2 = NAT]
+sudo ip route add 192.168.25.2  via 192.168.100.170
+ssh -fNT -L 0.0.0.0:80:192.168.25.2:80 stack@192.168.25.2
+
+
+
+
+
+
+
+
+
+
+
+
+sudo openstack tripleo deploy \
+  --templates templates \
+  --local-ip=$IP/$NETMASK \
+  -e /usr/share/openstack-tripleo-heat-templates/environments/standalone/standalone-tripleo.yaml \
+  -r /usr/share/openstack-tripleo-heat-templates/roles/Standalone.yaml \
+  -e $HOME/containers-prepare-parameters.yaml \
+  -e $HOME/standalone_parameters.yaml \
+  -e $HOME/templates/environments/network-environment.yaml \
+	-e $HOME/templates/environments/network-isolation.yaml \
+  --output-dir $HOME \
+  --standalone
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

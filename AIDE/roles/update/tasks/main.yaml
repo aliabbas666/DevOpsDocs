@@ -1,0 +1,15 @@
+- name: Updating FIM Databse
+  command: aide -c /etc/aide/aide.conf --update
+  register: output
+  failed_when: output.rc != 0 and output.rc != 1 and output != 2 and output.rc != 4 and output.rc != 7
+  changed_when: output.rc == 1 or output == 2 or output.rc == 4
+
+- name: Copying Databases
+  command: cp /var/lib/aide/aide.db.new /var/lib/aide/aide.db
+
+- name: Checking Files Integrity
+  command: aide -c /etc/aide/aide.conf --check
+  register: output
+  failed_when: output.rc != 0 and output.rc != 4 and output.rc != 7
+  changed_when: output.rc == 1 or output == 2 or output.rc == 4
+- debug: msg="{{output.stdout_lines}}"

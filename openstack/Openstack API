@@ -1,0 +1,82 @@
+//Get Token
+curl -i \
+  -H "Content-Type: application/json" \
+  -d '
+{ "auth": {
+    "identity": {
+      "methods": ["password"],
+      "password": {
+        "user": {
+          "name": "admin",
+          "domain": { "id": "default" },
+          "password": "HYX9PtzTOxSdKk7mTWiU1SkQw"
+        }
+      }
+    }
+  }
+}' \
+  "http://10.82.1.100:5000/v3/auth/tokens" ; echo
+  
+//Create Newtork
+curl -L -X POST 'http://10.82.1.100:9696/v2.0/networks/' -H 'Content-Type: application/json' -H 'X-Auth-Token: gAAAAABgcKVDk2ebNVLIYKyCCRbilk3WA6cQNyX3SNUqMu-ogUnY_FbpztHpzIusQMk7xDYGsePWTTc2KAAFpY33WUQ5hDWU8y_UEWq0stUzIAISeGfVDZywwoJ0xSNnJoNrYSrVibDnr7Fnx2zLlItp4KFGzmY96fQvY4jQJMXMM2ehk5NHXg0' --data-raw '{
+    "networks": [
+        {
+            "name": "usman",
+            "admin_state_up": true
+        }
+    ]
+}'
+
+//Get Specific Network
+curl --location --request GET 'http://10.82.1.100:9696/v2.0/networks/' --header 'Content-Type: application/json' --header 'X-Auth-Token: '"$TOKEN"'' | jq '.networks[] | {id:.id ,name:.name }' --compact-output | grep test_network | jq '.id'
+
+//Get Network Id
+curl -L -X POST 'http://10.82.1.100:9696/v2.0/networks/' -H 'Content-Type: application/json' -H 'X-Auth-Token: '"$TOKEN"'' --data-raw '{
+    "networks": [
+        {
+            "name": "usman",
+            "admin_state_up": true
+        }
+    ]
+}'| jq '.networks[].id' | sed -e 's/^"//' -e 's/"$//' 
+
+
+//Create Subnet
+curl -L -X POST 'http://10.82.1.100:9696/v2.0/subnets' -H 'Content-Type: application/json' -H 'X-Auth-Token: '"$TOKEN"'' --data-raw '{
+    "subnet": {
+        "network_id": "'"$NET_ID"'",
+        "ip_version": 4,
+        "cidr": "192.168.1.0/24"
+    }
+}'
+
+//Create Router
+curl -L -X POST 'http://10.82.1.100:9696/v2.0/routers' -H 'Content-Type: application/json' -H 'X-Auth-Token: '"$TOKEN"'' --data-raw '{
+    "router": {
+        "name": "router",
+        "admin_state_up": true
+    }
+}'
+
+
+//Add Router Interface
+curl -L -g -X PUT 'http://10.82.1.100:9696/v2.0/routers/'"$router_id"'/add_router_interface' -H 'Content-Type: application/json' -H 'X-Auth-Token: '"$TOKEN"'' --data-raw '{
+    "subnet_id": "'"$ID"'"
+}'
+
+//Get Flavor Id
+curl -s -L -X GET 'http://10.82.1.100:8774/v2.1/flavors' -H 'X-Auth-Token: '"$TOKEN"'' | jq '.flavors[] | {id:.id , name:.name}' --compact-output | grep m1.tiny | jq '.id' | sed -e 's/^"//' -e 's/"$//'
+
+
+
+ovs-vsctl del-port br-ex eno1
+ip add flush dev br-ex
+ip add flush dev eth0
+ip addr add 103.156.210.162 dev eno1
+ip rou add default via 103.156.210.167
+ip link set dev br-ex up
+ip link set dev br-int up
+ip link set dev ovs-system up
+
+
+

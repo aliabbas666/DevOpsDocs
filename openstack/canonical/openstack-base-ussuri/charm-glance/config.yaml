@@ -1,0 +1,527 @@
+options:
+  debug:
+    type: boolean
+    default: False
+    description: Enable debug logging.
+  verbose:
+    type: boolean
+    default: False
+    description: Enable verbose logging.
+  use-syslog:
+    type: boolean
+    default: False
+    description: |
+      Setting this to True will allow supporting services to log to syslog.
+  openstack-origin:
+    type: string
+    default: distro
+    description: |
+      Repository from which to install. May be one of the following:
+      distro (default), ppa:somecustom/ppa, a deb url sources entry,
+      or a supported Ubuntu Cloud Archive e.g.
+      .
+      cloud:<series>-<openstack-release>
+      cloud:<series>-<openstack-release>/updates
+      cloud:<series>-<openstack-release>/staging
+      cloud:<series>-<openstack-release>/proposed
+      .
+      See https://wiki.ubuntu.com/OpenStack/CloudArchive for info on which
+      cloud archives are available and supported.
+      .
+      NOTE: updating this setting to a source that is known to provide
+      a later version of OpenStack will trigger a software upgrade unless
+      action-managed-upgrade is set to True.
+  action-managed-upgrade:
+    type: boolean
+    default: False
+    description: |
+      If True enables openstack upgrades for this charm via juju actions.
+      You will still need to set openstack-origin to the new repository but
+      instead of an upgrade running automatically across all units, it will
+      wait for you to execute the openstack-upgrade action for this charm on
+      each unit. If False it will revert to existing behavior of upgrading
+      all units on config change.
+  harden:
+    type: string
+    default:
+    description: |
+      Apply system hardening. Supports a space-delimited list of modules
+      to run. Supported modules currently include os, ssh, apache and mysql.
+  database-user:
+    type: string
+    default: glance
+    description: Database username
+  database:
+    type: string
+    default: glance
+    description: Glance database name.
+  api-config-flags:
+    type: string
+    default:
+    description: |
+      Comma-separated list of key=value pairs to be added to glance-api.conf
+      where 'value' may itself be a comma-separated list of values to be
+      assigned to the 'key'.
+  registry-config-flags:
+    type: string
+    default:
+    description: |
+      Comma-separated list of key=value pairs to be added to
+      glance-registry.conf where 'value' may itself be a comma-separated list
+      of values to be assigned to the 'key'.
+  region:
+    type: string
+    default: RegionOne
+    description: OpenStack Region
+  use-internal-endpoints:
+    type: boolean
+    default: False
+    description: |
+      Openstack mostly defaults to using public endpoints for
+      internal communication between services. If set to True this option will
+      configure services to use internal endpoints where possible.
+  ceph-osd-replication-count:
+    type: int
+    default: 3
+    description: |
+      This value dictates the number of replicas ceph must make of any
+      object it stores within the images rbd pool. Of course, this only
+      applies if using Ceph as a backend store. Note that once the images
+      rbd pool has been created, changing this value will not have any
+      effect (although it can be changed in ceph by manually configuring
+      your ceph cluster).
+  ceph-pool-weight:
+    type: int
+    default: 5
+    description: |
+      Defines a relative weighting of the pool as a percentage of the total
+      amount of data in the Ceph cluster. This effectively weights the number
+      of placement groups for the pool created to be appropriately portioned
+      to the amount of data expected. For example, if the compute images
+      for the OpenStack compute instances are expected to take up 20% of the
+      overall configuration then this value would be specified as 20. Note -
+      it is important to choose an appropriate value for the pool weight as
+      this directly affects the number of placement groups which will be
+      created for the pool. The number of placement groups for a pool can
+      only be increased, never decreased - so it is important to identify the
+      percent of data that will likely reside in the pool.
+  restrict-ceph-pools:
+    type: boolean
+    default: False
+    description: |
+      Optionally restrict Ceph key permissions to access pools as required.
+  rbd-pool-name:
+    default:
+    type: string
+    description: |
+      Optionally specify an existing rbd pool that cinder should map to.
+  pool-type:
+    type: string
+    default: replicated
+    description: |
+      Ceph pool type to use for storage - valid values include ‘replicated’
+      and ‘erasure-coded’.
+  ec-profile-name:
+    type: string
+    default:
+    description: |
+      Name for the EC profile to be created for the EC pools. If not defined
+      a profile name will be generated based on the name of the pool used by
+      the application.
+  ec-rbd-metadata-pool:
+    type: string
+    default:
+    description: |
+      Name of the metadata pool to be created (for RBD use-cases). If not
+      defined a metadata pool name will be generated based on the name of
+      the data pool used by the application.  The metadata pool is always
+      replicated, not erasure coded.
+  ec-profile-k:
+    type: int
+    default: 1
+    description: |
+      Number of data chunks that will be used for EC data pool. K+M factors
+      should never be greater than the number of available zones (or hosts)
+      for balancing.
+  ec-profile-m:
+    type: int
+    default: 2
+    description: |
+      Number of coding chunks that will be used for EC data pool. K+M factors
+      should never be greater than the number of available zones (or hosts)
+      for balancing.
+  ec-profile-locality:
+    type: int
+    default:
+    description: |
+      (lrc plugin - l) Group the coding and data chunks into sets of size l.
+      For instance, for k=4 and m=2, when l=3 two groups of three are created.
+      Each set can be recovered without reading chunks from another set. Note
+      that using the lrc plugin does incur more raw storage usage than isa or
+      jerasure in order to reduce the cost of recovery operations.
+  ec-profile-crush-locality:
+    type: string
+    default:
+    description: |
+      (lrc plugin) The type of the crush bucket in which each set of chunks
+      defined by l will be stored. For instance, if it is set to rack, each
+      group of l chunks will be placed in a different rack. It is used to
+      create a CRUSH rule step such as step choose rack. If it is not set,
+      no such grouping is done.
+  ec-profile-durability-estimator:
+    type: int
+    default:
+    description: |
+      (shec plugin - c) The number of parity chunks each of which includes
+      each data chunk in its calculation range. The number is used as a
+      durability estimator. For instance, if c=2, 2 OSDs can be down
+      without losing data.
+  ec-profile-helper-chunks:
+    type: int
+    default:
+    description: |
+      (clay plugin - d) Number of OSDs requested to send data during
+      recovery of a single chunk. d needs to be chosen such that
+      k+1 <= d <= k+m-1. Larger the d, the better the savings.
+  ec-profile-scalar-mds:
+    type: string
+    default:
+    description: |
+      (clay plugin) specifies the plugin that is used as a building
+      block in the layered construction. It can be one of jerasure,
+      isa, shec (defaults to jerasure).
+  ec-profile-plugin:
+    type: string
+    default: jerasure
+    description: |
+      EC plugin to use for this applications pool. The following list of
+      plugins acceptable - jerasure, lrc, isa, shec, clay.
+  ec-profile-technique:
+    type: string
+    default:
+    description: |
+      EC profile technique used for this applications pool - will be
+      validated based on the plugin configured via ec-profile-plugin.
+      Supported techniques are ‘reed_sol_van’, ‘reed_sol_r6_op’,
+      ‘cauchy_orig’, ‘cauchy_good’, ‘liber8tion’ for jerasure,
+      ‘reed_sol_van’, ‘cauchy’ for isa and ‘single’, ‘multiple’
+      for shec.
+  ec-profile-device-class:
+    type: string
+    default:
+    description: |
+      Device class from CRUSH map to use for placement groups for
+      erasure profile - valid values: ssd, hdd or nvme (or leave
+      unset to not use a device class).
+  worker-multiplier:
+    type: float
+    default:
+    description: |
+      The CPU core multiplier to use when configuring worker processes for
+      Glance. By default, the number of workers for each daemon is set to
+      twice the number of CPU cores a service unit has. When deployed in
+      a LXD container, this default value will be capped to 4 workers
+      unless this configuration option is set.
+  expose-image-locations:
+    type: boolean
+    default: True
+    description: |
+      Expose underlying image locations via the API when using Ceph for image
+      storage. Only disable this option if you do not wish to use
+      copy-on-write clones of RAW format images with Ceph in Cinder and Nova.
+  restrict-image-location-operations:
+    type: boolean
+    default: False
+    description: |
+      If this is set to True, all *_image_location operations in the Glance api
+      will be restricted to role:admin which will result in non-admin users no
+      longer being able to view the "locations" information for an image.
+      This only affects environments that have expose-image-locations set to
+      True.
+      WARNING: enabling this restriction will cause Nova to no longer be able
+      to create COW clones or snapshots for non-admin users when using the
+      RBDImageBackend in the nova-compute charm.
+  rabbit-user:
+    type: string
+    default: glance
+    description: Username to request access on rabbitmq-server.
+  rabbit-vhost:
+    type: string
+    default: openstack
+    description: RabbitMQ virtual host to request access on rabbitmq-server.
+  container-formats:
+    type: string
+    default:
+    description: |
+      Comma separated list of container formats that Glance will support.
+  disk-formats:
+    type: string
+    default: ami,ari,aki,vhd,vmdk,raw,qcow2,vdi,iso,root-tar
+    description: |
+      Comma separated list of disk formats that Glance will support.
+  image-size-cap:
+    type: string
+    default: 1TB
+    description: |
+      Maximum size of image a user can upload. Defaults to 1TB
+      (1099511627776 bytes). Example values: 500M, 500MB, 5G, 5TB.
+      Valid units: K, KB, M, MB, G, GB, T, TB, P, PB. If no units provided,
+      bytes are assumed.
+      .
+      WARNING: this value should only be increased after careful consideration
+      and must be set to a value under 8EB (9223372036854775808 bytes).
+  # HA configuration settings
+  dns-ha:
+    type: boolean
+    default: False
+    description: |
+      Use DNS HA with MAAS 2.0. Note if this is set do not set vip
+      settings below.
+  vip:
+    type: string
+    default:
+    description: |
+      Virtual IP(s) to use to front API services in HA configuration.
+      .
+      If multiple networks are being used, a VIP should be provided for each
+      network, separated by spaces.
+  vip_iface:
+    type: string
+    default: eth0
+    description: |
+      Default network interface to use for HA vip when it cannot be
+      automatically determined.
+  vip_cidr:
+    type: int
+    default: 24
+    description: |
+      Default CIDR netmask to use for HA vip when it cannot be automatically
+      determined.
+  ha-bindiface:
+    type: string
+    default: eth0
+    description: |
+      Default network interface on which HA cluster will bind to communication
+      with the other members of the HA Cluster.
+  ha-mcastport:
+    type: int
+    default: 5444
+    description: |
+      Default multicast port number that will be used to communicate between
+      HA Cluster nodes.
+  haproxy-server-timeout:
+    type: int
+    default:
+    description: |
+      Server timeout configuration in ms for haproxy, used in HA
+      configurations. If not provided, default value of 90000ms is used.
+  haproxy-client-timeout:
+    type: int
+    default:
+    description: |
+      Client timeout configuration in ms for haproxy, used in HA
+      configurations. If not provided, default value of 90000ms is used.
+  haproxy-queue-timeout:
+    type: int
+    default:
+    description: |
+      Queue timeout configuration in ms for haproxy, used in HA
+      configurations. If not provided, default value of 9000ms is used.
+  haproxy-connect-timeout:
+    type: int
+    default:
+    description: |
+      Connect timeout configuration in ms for haproxy, used in HA
+      configurations. If not provided, default value of 9000ms is used.
+  ssl_cert:
+    type: string
+    default:
+    description: |
+      SSL certificate to install and use for API ports. Setting this value
+      and ssl_key will enable reverse proxying, point Glance's entry in the
+      Keystone catalog to use https, and override any certificate and key
+      issued by Keystone (if it is configured to do so).
+  ssl_key:
+    type: string
+    default:
+    description: SSL key to use with certificate specified as ssl_cert.
+  ssl_ca:
+    type: string
+    default:
+    description: |
+      SSL CA to use with the certificate and key provided - this is only
+      required if you are providing a privately signed ssl_cert and ssl_key.
+  # Network config (by default all access is over 'private-address')
+  os-admin-network:
+    type: string
+    default:
+    description: |
+      The IP address and netmask of the OpenStack Admin network (e.g.
+      192.168.0.0/24)
+      .
+      This network will be used for admin endpoints.
+  os-internal-network:
+    type: string
+    default:
+    description: |
+      The IP address and netmask of the OpenStack Internal network (e.g.
+      192.168.0.0/24)
+      .
+      This network will be used for internal endpoints.
+  os-public-network:
+    type: string
+    default:
+    description: |
+      The IP address and netmask of the OpenStack Public network (e.g.
+      192.168.0.0/24)
+      .
+      This network will be used for public endpoints.
+  os-public-hostname:
+    type: string
+    default:
+    description: |
+      The hostname or address of the public endpoints created for glance
+      in the keystone identity provider.
+      .
+      This value will be used for public endpoints. For example, an
+      os-public-hostname set to 'glance.example.com' with ssl enabled will
+      create a public endpoint for glance of:
+      .
+      https://glance.example.com:9292/
+  os-internal-hostname:
+    type: string
+    default:
+    description: |
+      The hostname or address of the internal endpoints created for glance
+      in the keystone identity provider.
+      .
+      This value will be used for internal endpoints. For example, an
+      os-internal-hostname set to 'glance.internal.example.com' with ssl
+      enabled will create a internal endpoint for glance of:
+      .
+      https://glance.internal.example.com:9292/
+  os-admin-hostname:
+    type: string
+    default:
+    description: |
+      The hostname or address of the admin endpoints created for glance
+      in the keystone identity provider.
+      .
+      This value will be used for admin endpoints. For example, an
+      os-admin-hostname set to 'glance.admin.example.com' with ssl enabled will
+      create a admin endpoint for glance of:
+      .
+      https://glance.admin.example.com:9292/
+  prefer-ipv6:
+    type: boolean
+    default: False
+    description: |
+      If True enables IPv6 support. The charm will expect network interfaces
+      to be configured with an IPv6 address. If set to False (default) IPv4
+      is expected.
+      .
+      NOTE: these charms do not currently support IPv6 privacy extension. In
+      order for this charm to function correctly, the privacy extension must be
+      disabled and a non-temporary address must be configured/available on
+      your network interface.
+  # Monitoring config
+  nagios_context:
+    type: string
+    default: "juju"
+    description: |
+      Used by the nrpe-external-master subordinate charm. A string that will
+      be prepended to instance name to set the host name in nagios. So for
+      instance the hostname would be something like 'juju-myservice-0'. If
+      you are running multiple environments with the same services in them
+      this allows you to differentiate between them.
+  nagios_servicegroups:
+    type: string
+    default: ""
+    description: |
+      A comma-separated list of nagios service groups.
+      If left empty, the nagios_context will be used as the servicegroup
+  filesystem-store-datadir:
+    type: string
+    default: "/var/lib/glance/images/"
+    description: |
+      Directory to which the filesystem backend store writes images.
+      Upon start up, Glance creates the directory if it doesn’t already exist
+      and verifies write access to the user under which glance-api runs. If
+      the write access isn’t available, a BadStoreConfiguration exception is
+      raised and the filesystem store may not be available for adding new
+      images. NOTE: This directory is used only when filesystem store is used
+      as a storage backend.
+  use-policyd-override:
+    type: boolean
+    default: False
+    description: |
+      If True then use the resource file named 'policyd-override' to install
+      override YAML files in the service's policy.d directory.  The resource
+      file should be a ZIP file containing at least one yaml file with a .yaml
+      or .yml extension.  If False then remove the overrides.
+  bluestore-compression-algorithm:
+    type: string
+    default:
+    description: |
+      Compressor to use (if any) for pools requested by this charm.
+      .
+      NOTE: The ceph-osd charm sets a global default for this value (defaults
+      to 'lz4' unless configured by the end user) which will be used unless
+      specified for individual pools.
+  bluestore-compression-mode:
+    type: string
+    default:
+    description: |
+      Policy for using compression on pools requested by this charm.
+      .
+      'none' means never use compression.
+      'passive' means use compression when clients hint that data is
+      compressible.
+      'aggressive' means use compression unless clients hint that
+      data is not compressible.
+      'force' means use compression under all circumstances even if the clients
+      hint that the data is not compressible.
+  bluestore-compression-required-ratio:
+    type: float
+    default:
+    description: |
+      The ratio of the size of the data chunk after compression relative to the
+      original size must be at least this small in order to store the
+      compressed version on pools requested by this charm.
+  bluestore-compression-min-blob-size:
+    type: int
+    default:
+    description: |
+      Chunks smaller than this are never compressed on pools requested by
+      this charm.
+  bluestore-compression-min-blob-size-hdd:
+    type: int
+    default:
+    description: |
+      Value of bluestore compression min blob size for rotational media on
+      pools requested by this charm.
+  bluestore-compression-min-blob-size-ssd:
+    type: int
+    default:
+    description: |
+      Value of bluestore compression min blob size for solid state media on
+      pools requested by this charm.
+  bluestore-compression-max-blob-size:
+    type: int
+    default:
+    description: |
+      Chunks larger than this are broken into smaller blobs sizing bluestore
+      compression max blob size before being compressed on pools requested by
+      this charm.
+  bluestore-compression-max-blob-size-hdd:
+    type: int
+    default:
+    description: |
+      Value of bluestore compression max blob size for rotational media on
+      pools requested by this charm.
+  bluestore-compression-max-blob-size-ssd:
+    type: int
+    default:
+    description: |
+      Value of bluestore compression max blob size for solid state media on
+      pools requested by this charm.

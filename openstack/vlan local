@@ -1,0 +1,114 @@
+10.84.21.0 [200] provisioing
+10.84.20.0 [201] public       (low  bandwidth) bond-0
+10.84.30.0 [202] internal     (low  bandwidth) bond-0
+10.84.40.0 [203] admin        (low  bandwidth) bond-1
+10.84.50.0 [204] storage      (high bandwidth) bond-0
+10.84.60.0 [205] compute      (high bandwidth) bond-1
+10.84.70.0 [206] external     (high bandwidth) bond-1
+10.84.80.0 [207] cluster      (high bandwidth) bond-
+
+Controller & compute:
+  10.84.21.0 [200] provisioing  enp65s0f1
+  10.84.20.0 [201] public       (low  bandwidth) bond-0
+  10.84.30.0 [202] internal     (low  bandwidth) bond-0
+  10.84.40.0 [203] admin        (low  bandwidth) bond-1
+  10.84.50.0 [204] storage      (high bandwidth) bond-0
+  10.84.60.0 [205] compute      (high bandwidth) bond-1
+
+maas admin spaces create name=provisioning
+maas admin spaces create name=public
+maas admin spaces create name=internal
+maas admin spaces create name=admin
+maas admin spaces create name=storage
+maas admin spaces create name=compute
+maas admin spaces create name=external
+maas admin spaces create name=cluster
+
+maas admin vlans create 1 vid=201
+maas admin vlans create 1 vid=202
+maas admin vlans create 1 vid=203
+maas admin vlans create 1 vid=204
+maas admin vlans create 1 vid=205
+maas admin vlans create 1 vid=206
+maas admin vlans create 1 vid=207
+
+maas admin vlan update 1 200 space=provisioning
+maas admin vlan update 1 201 space=public
+maas admin vlan update 1 202 space=internal
+maas admin vlan update 1 203 space=admin
+maas admin vlan update 1 204 space=storage
+maas admin vlan update 1 205 space=compute
+maas admin vlan update 1 206 space=external
+maas admin vlan update 1 207 space=cluster
+
+maas admin ipranges create type=dynamic start_ip=10.84.21.199 end_ip=10.84.21.249
+maas admin ipranges create type=dynamic start_ip=10.84.20.199 end_ip=10.84.20.249
+maas admin ipranges create type=dynamic start_ip=10.84.30.199 end_ip=10.84.30.249
+maas admin ipranges create type=dynamic start_ip=10.84.40.199 end_ip=10.84.40.249
+maas admin ipranges create type=dynamic start_ip=10.84.50.199 end_ip=10.84.50.249
+maas admin ipranges create type=dynamic start_ip=10.84.60.199 end_ip=10.84.60.249
+maas admin ipranges create type=dynamic start_ip=10.84.70.199 end_ip=10.84.70.249
+maas admin ipranges create type=dynamic start_ip=10.84.80.199 end_ip=10.84.80.249
+
+maas admin subnet update 10.84.21.0/24 name=provisioning
+maas admin subnet update 10.84.20.0/24 name=public
+maas admin subnet update 10.84.30.0/24 name=internal
+maas admin subnet update 10.84.40.0/24 name=admin
+maas admin subnet update 10.84.50.0/24 name=storage
+maas admin subnet update 10.84.60.0/24 name=compute
+maas admin subnet update 10.84.70.0/24 name=external
+maas admin subnet update 10.84.80.0/24 name=cluster
+
+for i in 10.84.20.0/24 10.84.30.0/24 10.84.40.0/24 10.84.50.0/24 10.84.60.0/24 10.84.70.0/24 10.84.80.0/24; do maas admin iprange delete $i; done 
+
+for i in {201..207..1}; do maas admin vlan delete 1 $i; done
+
+for i in provisioning public internal admin storage cluster external compute; do maas admin space delete $i; done
+
+maas admin interfaces create-bond y4yrmd name=bond1 parents=eno3 parents=eno4 bond_mode=802.3ad 
+
+
+
+interface Port-channel 4
+description compute1-bond0
+switchport trunk encapsulation dot1q
+switchport trunk allowed vlan 201,202,204
+switchport mode trunk
+exit
+interface range GigabitEthernet 0/41-42
+switchport trunk encapsulation dot1q
+switchport trunk allowed vlan 201,202,204
+switchport mode trunk
+channel-group 4 mode active
+end
+show interface Port-channel 4
+
+
+interface Port-channel 4
+description compute1-bond1
+switchport trunk encapsulation dot1q
+switchport trunk allowed vlan 203,205
+switchport mode trunk
+exit
+interface range GigabitEthernet 0/41-42
+switchport trunk encapsulation dot1q
+switchport trunk allowed vlan 203,205
+switchport mode trunk
+channel-group 4 mode active
+end
+show interface Port-channel 4
+
+
+
+vlan 201  
+name Public/External    
+vlan 202
+name Internal           
+vlan 203
+name Admin              
+vlan 204
+name Storage            
+vlan 205
+name Compute            
+vlan 207
+name Storage_Cluster

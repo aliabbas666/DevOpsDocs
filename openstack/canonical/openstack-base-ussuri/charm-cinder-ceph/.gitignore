@@ -1,0 +1,11 @@
+bin
+.coverage
+.testrepository
+.tox
+tags
+*.sw[nop]
+*.pyc
+.idea
+.stestr
+func-results.json
+**/__pycache__

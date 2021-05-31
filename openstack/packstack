@@ -1,0 +1,88 @@
+sudo systemctl disable --now firewalld NetworkManager
+sudo setenforce 0
+sudo sed -i 's/^SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
+sudo hostnamectl set-hostname lab.localdomain
+exec bash
+sudo yum -y update
+yum install epel-release -y
+yum install byobu -y
+yum remove epel-release -y
+sudo yum -y install vim wget curl telnet bash-completion
+sudo yum install -y centos-release-openstack-stein
+sudo yum install -y openstack-packstack
+sudo packstack --gen-answer-file /root/answers.txt
+sudo reboot
+sudo packstack --answer-file /root/answers.txt --timeout=1500
+
+
+sudo systemctl restart openstack-nova-compute
+sudo systemctl restart openstack-nova-api
+sudo systemctl restart openstack-nova-scheduler
+
+openstack port delete <router_name> <public_network_port>
+openstack port delete <router_name> <private_network_port>
+openstack router delete <router_name>
+
+openstack network delete <public_network_name>
+openstack newtork delete <private_network_name>
+
+openstack network create private
+	openstack subnet create \
+--network private1 \
+--allocation-pool start=192.168.2.2,end=192.168.2.100 \
+--dns-nameserver 8.8.8.8 \
+--dhcp \
+--gateway 192.168.2.1 \
+--subnet-range 192.168.2.0/24 private_subnet1
+
+openstack network create \
+--provider-network-type flat \
+--provider-physical-network extnet \
+--external public
+
+openstack subnet create \
+--network public \
+--dhcp \
+--allocation-pool start=10.0.0.10,end=10.0.0.100 \
+--gateway 10.0.0.1 \
+--dns-nameserver 8.8.8.8 \
+--subnet-range 10.0.0.0/24 public_subnet
+
+openstack router create router
+openstack router set --external-gateway public router
+openstack router add subnet router private_subnet
+
+openstack security group create basic --description "Allow base ports"
+openstack security group rule create --protocol TCP --dst-port 22 --remote-ip 0.0.0.0/0 basic
+openstack security group rule create --protocol TCP --dst-po944377186rt 80 --remote-ip 0.0.0.0/0 basic
+openstack security group rule create --protocol TCP --dst-port 443 --remote-ip 0.0.0.0/0 basic
+openstack security group rule create --protocol ICMP --remote-ip 0.0.0.0/0 basic
+
+openstack keypair create --public-key=~/.ssh/id_rsa.pub mykey
+
+wget http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img
+glance image-create --name "cirros" \
+  --file cirros-0.4.0-x86_64-disk.img \
+  --disk-format qcow2 --container-format bare \
+  --visibility=public
+  
+openstack server create --flavor m1.tiny --image cirros --network private --security-group basic --key-name mykey test
+openstack floating ip create public
+openstack server add floating ip test 10.0.0.89
+
+
+
+
+
+
+
+
+
+
+
+
+sudo ovs-vsctl add-port br-ex eth0; systemctl restart network.service
+
+
+
+

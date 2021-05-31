@@ -1,0 +1,174 @@
+version: '3'
+services:
+
+  memcached:
+    image: memcached:1.5.0-alpine
+    environment:
+      LOGSTASH_FIELDS: "service=memcached"
+    volumes:
+    - "/etc/localtime:/etc/localtime:ro"
+    restart: always
+
+  zookeeper:
+    image: zookeeper:3.4
+    environment:
+      LOGSTASH_FIELDS: "service=zookeeper"
+    restart: on-failure
+    ports:
+      - "2181:2181"
+    volumes:
+    - "/etc/localtime:/etc/localtime:ro"
+    restart: always
+
+  kafka:
+    image: monasca/kafka:0.9.0.1-2.11-1.1.6
+    environment:
+      KAFKA_DELETE_TOPIC_ENABLE: "true"
+      LOGSTASH_FIELDS: "service=kafka"
+    restart: on-failure
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    volumes:
+    - "/etc/localtime:/etc/localtime:ro"
+    restart: always
+
+  kafka-watcher:
+    image: monasca/kafka-watcher:0.0.3
+    environment:
+      BOOT_STRAP_SERVERS: "kafka"
+      PROMETHEUS_ENDPOINT: "0.0.0.0:8080"
+      LOGSTASH_FIELDS: "service=kafka-watcher"
+    depends_on:
+      - kafka
+    ports:
+      - "18080:8080"
+    volumes:
+    - "/etc/localtime:/etc/localtime:ro"
+    restart: always
+
+  kafka-init:
+    image: monasca/kafka-init:0.0.3
+    environment:
+      ZOOKEEPER_CONNECTION_STRING: "zookeeper:2181"
+      KAFKA_TOPIC_CONFIG: segment.ms=900000 # 15m
+      KAFKA_CREATE_TOPICS: "\
+        metrics:64:1,\
+        alarm-state-transitions:12:1,\
+        alarm-notifications:12:1,\
+        retry-notifications:3:1,\
+        events:12:1,\
+        kafka-health-check:1:1,\
+        60-seconds-notifications:3:1"
+      LOGSTASH_FIELDS: "service=kafka-init"
+    depends_on:
+      - zookeeper
+
+        #  mysql:
+        #    image: mysql:5.7
+        #    environment:
+        #      MYSQL_ROOT_PASSWORD: secretmysql
+        #      LOGSTASH_FIELDS: "service=mysql"
+        #  mysql-init:
+        #    image:  monasca/mysql-init:1.5.4
+        #    environment:
+        #      MYSQL_INIT_DISABLE_REMOTE_ROOT: "false"
+        #      MYSQL_INIT_RANDOM_PASSWORD: "false"
+        #      LOGSTASH_FIELDS: "service=mysql-init"
+        #
+    volumes:
+    - "/etc/localtime:/etc/localtime:ro"
+    restart: always
+
+  monasca-sidecar:
+    image: timothyb89/monasca-sidecar:1.0.0
+    environment:
+      LOGSTASH_FIELDS: "service=monasca-sidecar"
+    volumes:
+    - "/etc/localtime:/etc/localtime:ro"
+    restart: always
+
+  monasca:
+    image: sahal/api:v1
+    environment:
+      SIDECAR_URL: "http://monasca-sidecar:4888/v1/ingest"
+      LOGSTASH_FIELDS: "service=monasca-api"
+      KEYSTONE_IDENTITY_URI: "http://10.133.128.140:5000"
+      KEYSTONE_AUTH_URI: "http://10.133.128.140:5000"
+      KEYSTONE_ADMIN_USER: "svc.dcm"
+      KEYSTONE_ADMIN_PASSWORD: "letmein2DCM!"
+      KEYSTONE_ADMIN_TENANT: "DCM"
+      KEYSTONE_INSECURE: "true"
+      KEYSTONE_REGION_NAME: "regionOne"
+      OS_USER_DOMAIN_NAME: "Default"
+      OS_PROJECT_DOMAIN_NAME: "Default"
+      READ_ONLY_AUTHORIZED_ROLES: "monitoring"
+      MYSQL_HOST: "10.131.129.10"
+      INFLUX_HOST: "10.131.129.10"
+    depends_on:
+            # - influxdb
+            #- mysql
+      - zookeeper
+      - kafka
+      - monasca-sidecar
+      - memcached
+    ports:
+      - "8070:8070"
+    volumes:
+    - "/etc/localtime:/etc/localtime:ro"
+    restart: always
+
+  monasca-persister:
+    image: monasca/persister:1.6
+    environment:
+      LOGSTASH_FIELDS: "service=monasca-persister"
+      INFLUX_HOST: "10.131.129.10"
+    restart: on-failure
+    depends_on:
+      - monasca
+        # - influxdb
+      - zookeeper
+      - kafka
+    volumes:
+    - "/etc/localtime:/etc/localtime:ro"
+    restart: always
+
+  grafana:
+    image: monasca/grafana:4.0.0-1.5.1
+    environment:
+      GF_AUTH_BASIC_ENABLED: "true"
+      GF_USERS_ALLOW_SIGN_UP: "true"
+      GF_USERS_ALLOW_ORG_CREATE: "true"
+      GF_AUTH_KEYSTONE_ENABLED: "true"
+      GF_AUTH_KEYSTONE_AUTH_URL: https://10.132.128.198:13000
+      GF_AUTH_KEYSTONE_VERIFY_SSL_CERT: "false"
+      GF_AUTH_KEYSTONE_DEFAULT_DOMAIN: "Default"
+     #GRAFANA_ADMIN_USER: "grafana-admin"
+     #GRAFANA_ADMIN_PASSWORD: "admin"
+      LOGSTASH_FIELDS: "service=grafana"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - monasca
+#      - keystone
+    volumes:
+    - "/etc/localtime:/etc/localtime:ro"
+    restart: always
+
+  grafana-init:
+    image: sahal/grafana-init:v1
+    environment:
+      #GRAFANA_USERNAME: "grafana-admin"
+      #GRAFANA_PASSWORD: "admin"
+      #DATASOURCE_TYPE: "monasca"
+      #DATASOURCE_URL: "http://10.81.1.93:8070"
+      #DATASOURCE_ACCESS_MODE: "proxy"
+      #DATASOURCE_AUTH: "Token"
+   #  DATASOURCE_AUTH_TOKEN: "gAAAAABd9zij6JDbqb7WNstRflHt026Wv7jjFtNxo9e40MFK1geez0SSYZG0Y6fXznKc4jcvmblkGZ5bqrsLh2vTx36IB4UGj0kpF7xDHFQjg5S42xqvFpCPZTlsWvunyTEo31Xm_0IHvhtqZZliTVbqoeDEAPNwBn25tahulKh1vh   #_Qe-gq5Ww"
+      LOGSTASH_FIELDS: "service=grafana-init"
+    depends_on:
+      - grafana
+    volumes:
+    - "/etc/localtime:/etc/localtime:ro"
+    restart: always

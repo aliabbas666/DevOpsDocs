@@ -1,0 +1,40 @@
+{% if sections and 'DEFAULT' in sections -%}
+{% for key, value in sections['DEFAULT'] -%}
+{{ key }} = {{ value }}
+{% endfor %}
+{%- endif %}
+
+{% if backends -%}
+enabled_backends = {{ backends }}
+{%- endif %}
+{% if default_volume_type -%}
+default_volume_type = {{ default_volume_type }}
+{%- endif %}
+
+{% for section in sections -%}
+{% if section != 'DEFAULT' -%}
+[{{ section }}]
+{% for key, value in sections[section] -%}
+{{ key }} = {{ value }}
+{% endfor %}
+{% endif %}
+{%- endfor %}
+
+{% if sectional_default_config -%}
+{% if volume_driver -%}
+[LVM]
+volumes_dir = {{ volumes_dir }}
+volume_name_template = {{ volume_name_template }}
+volume_group = {{ volume_group }}
+volume_driver = {{ volume_driver }}
+volume_backend_name = {{ volume_backend_name }}
+{% endif -%}
+{% if rbd_pool -%}
+[CEPH]
+rbd_pool = {{ rbd_pool }}
+host = {{ host }}
+rbd_user = {{ rbd_user }}
+volume_driver = {{ ceph_volume_driver }}
+rbd_ceph_conf = {{ rbd_ceph_conf }}
+{% endif %}
+{% endif %}

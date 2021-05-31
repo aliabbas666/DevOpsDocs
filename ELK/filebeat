@@ -1,0 +1,14 @@
+Filebeat inputs ==> enabled: true
+
+Outputs ==> output.logstash
+  						hosts: ["10.81.1.39:5044"]
+  					//comment rest in output session
+  					
+Logging ==> logging.level: info
+						logging.to_files: true
+						logging.files:
+							path: /var/log/filebeat
+							name: filebeat.log
+							keepfiles: 7
+							permissions: 0644
+

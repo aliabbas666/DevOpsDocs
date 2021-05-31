@@ -1,0 +1,53 @@
+#!/bin/bash
+export NETWORK_ID=$(curl -s -L -X POST 'http://'"$IP"':9696/v2.0/networks/' -H 'Content-Type: application/json' -H 'X-Auth-Token: '"$TOKEN"'' --data-raw '{
+    "networks": [
+        {
+            "name": "usman",
+            "admin_state_up": true
+        }
+    ]
+}'| jq '.networks[].id' | sed -e 's/^"//' -e 's/"$//')
+
+
+export SUBNET_ID=$(curl -s -L -X POST 'http://'"$IP"':9696/v2.0/subnets' -H 'Content-Type: application/json' -H 'X-Auth-Token: '"$TOKEN"'' --data-raw '{
+    "subnet": {
+        "name": "usman",
+        "network_id": "'"$NETWORK_ID"'",
+        "ip_version": 4,
+        "cidr": "192.168.2.0/24"
+    }
+}' | jq '.subnet.id' | sed -e 's/^"//' -e 's/"$//')
+
+
+export ROUTER_ID=$(curl -s -L -X POST 'http://'"$IP"':9696/v2.0/routers' -H 'Content-Type: application/json' -H 'X-Auth-Token: '"$TOKEN"'' --data-raw '{
+    "router": {
+        "name": "router",
+        "admin_state_up": true
+    }
+}'| jq '.router.id' | sed -e 's/^"//' -e 's/"$//')
+
+export IFACE_ID=$(curl -s -L -g -X PUT 'http://'"$IP"':9696/v2.0/routers/'"$ROUTER_ID"'/add_router_interface' -H 'Content-Type: application/json' -H 'X-Auth-Token: '"$TOKEN"'' --data-raw '{
+    "subnet_id": "'"$SUBNET_ID"'"
+}'| jq '.id' | sed -e 's/^"//' -e 's/"$//')
+
+export FLAVOR_ID=$(curl -s -L -X GET 'http://'"$IP"':8774/v2.1/flavors' -H 'X-Auth-Token: '"$TOKEN"'' | jq '.flavors[] | {id:.id , name:.name}' --compact-output | grep m1.tiny | jq '.id' | sed -e 's/^"//' -e 's/"$//')
+
+export IMG_ID=$(curl -s -L -g -X GET 'http://'"$IP"':9292/v2/images' -H 'X-Auth-Token: '"$TOKEN"'' | jq '.images[] | {id:.id , name:.name}' --compact-output | grep -i cirros | jq '.id' | sed -e 's/^"//' -e 's/"$//')
+
+export VM1_ID=$(curl -s -L -g -X POST 'http://'"$IP"':8774/v2.1/servers' -H 'X-Auth-Token: '"$TOKEN"'' -H 'Content-Type: application/json' --data-raw '{
+    "server" : {
+        "name" : "test",
+        "imageRef" : "'"$IMG_ID"'",
+        "flavorRef" : "'"$FLAVOR_ID"'",
+        "OS-DCF:diskConfig": "AUTO",
+        "networks" : [{
+            "uuid" : "'"$NETWORK_ID"'"
+        }],
+        "security_groups": [
+            {
+                "name": "default"
+            }
+        ]
+    }
+}'
+)

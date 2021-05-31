@@ -1,0 +1,53 @@
+name: vault
+maintainers:
+- OpenStack Charmers <openstack-discuss@lists.openstack.org>
+summary: a tool for managing secrets
+description: |
+  Vault secures, stores, and tightly controls access to
+  tokens, passwords, certificates, API keys, and other
+  secrets in modern computing. Vault handles leasing, key
+  revocation, key rolling, and auditing. Through a unified
+  API, users can access an encrypted Key/Value store and
+  network encryption-as-a-service, or generate AWS IAM/STS
+  credentials, SQL/NoSQL databases, X.509 certificates,
+  SSH credentials, and more.
+series:
+- xenial
+- bionic
+- focal
+- groovy
+tags:
+- security
+extra-bindings:
+  access:
+  external:
+requires:
+  db:
+    interface: pgsql
+  shared-db:
+    interface: mysql-shared
+  etcd:
+    interface: etcd
+  ha:
+    interface: hacluster
+    scope: container
+provides:
+  nrpe-external-master:
+    interface: nrpe-external-master
+    scope: container
+  secrets:
+    interface: vault-kv
+  certificates:
+    interface: tls-certificates
+peers:
+  cluster:
+    interface: vault-ha
+resources:
+  core:
+    type: file
+    filename: core.snap
+    description: Core snap
+  vault:
+    type: file
+    filename: vault.snap
+    description: Vault snap

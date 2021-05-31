@@ -1,0 +1,23 @@
+includes:
+  - layer:coordinator
+  - layer:leadership
+  - layer:snap
+  - layer:openstack-principle
+  - interface:mysql-shared
+  - interface:mysql-router
+  - interface:mysql-innodb-cluster
+options:
+  basic:
+    use_venv: True
+    packages: [ 'libmysqlclient-dev']
+  snap:
+    mysql-shell:
+      channel: stable
+repo: https://opendev.org/openstack/charm-mysql-innodb-cluster
+config:
+  deletes:
+    - verbose
+    - openstack-origin
+    - use-internal-endpoints
+    - debug
+    - use-syslog

@@ -1,0 +1,4 @@
+PATH=/var/lib/kolla/venv/bin:/usr/bin:/bin
+
+0 0 * * 0 /usr/bin/fernet-rotate.sh
+0 0 * * 3 /usr/bin/fernet-rotate.sh

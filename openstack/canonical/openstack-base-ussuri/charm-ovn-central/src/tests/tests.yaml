@@ -1,0 +1,29 @@
+charm_name: ovn-central
+gate_bundles:
+- bionic-train
+- bionic-ussuri
+- focal-ussuri
+- focal-victoria
+- groovy-victoria
+smoke_bundles:
+- focal-ussuri
+target_deploy_status:
+  ovn-central:
+    workload-status: waiting
+    workload-status-message: "'ovsdb-peer' incomplete, 'certificates' awaiting server certificate data"
+  vault:
+    workload-status: blocked
+    workload-status-message: Vault needs to be initialized
+  nrpe:
+    workload-status: blocked
+    workload-status-message: "Nagios server not configured or related"
+
+# Note that full end to end tests are performed with OVN in the
+# neutron-api-plugin-ovn and octavia charm gates
+configure:
+- zaza.openstack.charm_tests.vault.setup.auto_initialize_no_validation
+tests:
+- zaza.openstack.charm_tests.ovn.tests.CentralCharmOperationTest
+tests_options:
+  force_deploy:
+    - groovy-victoria

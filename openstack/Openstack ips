@@ -1,0 +1,11 @@
+10.81.125:
+	10.81.1.61 undercloud
+10.81.1.126
+	10.81.1.37 undercloud
+10.81.1.122
+	10.81.1.70 undercloud
+10.81.1.121
+	jumpserver
+	
+	
+sudo ip route add 192.168.24.24  via 10.81.1.153

@@ -1,0 +1,50 @@
+heat_template_version: 2016-10-14
+
+parameters:
+  project_name:
+    type: string
+    description: prpject name for user
+  user_name:
+    type: string
+    description: user name to be created
+  new_project:
+    type: string
+    description: project existence
+  password_v:
+    type: string
+    description: password for user
+  quota:
+    type: string
+    description: quota for user
+
+conditions:
+  if_yes: {equals: [{get_param: new_project}, y ]}
+
+resources:
+  project_n:
+    type: OS::Keystone::Project
+    condition: 'if_yes'
+    properties:
+      name: { get_param: project_name }
+      domain: default
+      description: New Project to be created
+  demo_user:
+    type: OS::Keystone::User
+    properties:
+      name: { get_param: user_name }
+      domain: default
+      description: Test user
+      default_project: 
+        if:
+          - if_yes
+          - { get_resource: project_n }
+          - { get_param: project_name }
+      password: { get_param: password_v }
+      roles:
+        - role: _member_
+          project:
+            if:
+              - if_yes
+              - { get_resource: project_n }
+              - { get_param: project_name }
+

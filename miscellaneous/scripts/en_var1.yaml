@@ -1,0 +1,7 @@
+
+parameters:
+  project_name: myproj
+  user_name: usman
+  new_project: y
+  password_v: letmein
+  quota: 10485760

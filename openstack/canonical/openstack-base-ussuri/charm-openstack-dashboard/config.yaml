@@ -1,0 +1,411 @@
+options:
+  debug:
+    type: string
+    default: "no"
+    description: Enable Django debug messages.
+  use-syslog:
+    type: boolean
+    default: False
+    description: |
+      Setting this to True will allow supporting services to log to syslog.
+  openstack-origin:
+    type: string
+    default: distro
+    description: |
+      Repository from which to install. May be one of the following:
+      distro (default), ppa:somecustom/ppa, a deb url sources entry,
+      or a supported Ubuntu Cloud Archive e.g.
+      .
+      cloud:<series>-<openstack-release>
+      cloud:<series>-<openstack-release>/updates
+      cloud:<series>-<openstack-release>/staging
+      cloud:<series>-<openstack-release>/proposed
+      .
+      See https://wiki.ubuntu.com/OpenStack/CloudArchive for info on which
+      cloud archives are available and supported.
+      .
+      NOTE: updating this setting to a source that is known to provide
+      a later version of OpenStack will trigger a software upgrade unless
+      action-managed-upgrade is set to True.
+  action-managed-upgrade:
+    type: boolean
+    default: False
+    description: |
+      If True enables openstack upgrades for this charm via juju actions.
+      You will still need to set openstack-origin to the new repository but
+      instead of an upgrade running automatically across all units, it will
+      wait for you to execute the openstack-upgrade action for this charm on
+      each unit. If False it will revert to existing behavior of upgrading
+      all units on config change.
+  harden:
+    type: string
+    default:
+    description: |
+      Apply system hardening. Supports a space-delimited list of modules
+      to run. Supported modules currently include os, ssh, apache and mysql.
+  webroot:
+    type: string
+    default: "/horizon"
+    description: |
+      Directory where application will be accessible, relative to
+      http://$hostname/.
+  session-timeout:
+    type: int
+    default: 3600
+    description:
+      A method to supersede the token timeout with a shorter dashboard session
+      timeout in seconds. For example, if your token expires in 60 minutes, a
+      value of 1800 will log users out after 30 minutes.
+  default-role:
+    type: string
+    default: "member"
+    description: |
+      Default role for Horizon operations that will be created in
+      Keystone upon introduction of an identity-service relation.
+  default-domain:
+    type: string
+    default:
+    description: |
+      Default domain when authenticating with Horizon. Disables the domain
+      field in the login page.
+  dns-ha:
+    type: boolean
+    default: False
+    description: |
+      Use DNS HA with MAAS 2.0. Note if this is set do not set vip
+      settings below.
+  vip:
+    type: string
+    default:
+    description: |
+      Virtual IP to use to front openstack dashboard ha configuration.
+  vip_iface:
+    type: string
+    default: eth0
+    description: |
+      Default network interface to use for HA vip when it cannot be
+      automatically determined.
+  vip_cidr:
+    type: int
+    default: 24
+    description: |
+      Default CIDR netmask to use for HA vip when it cannot be automatically
+      determined.
+  ha-bindiface:
+    type: string
+    default: eth0
+    description: |
+      Default network interface on which HA cluster will bind to communication
+      with the other members of the HA Cluster.
+  ha-mcastport:
+    type: int
+    default: 5410
+    description: |
+      Default multicast port number that will be used to communicate between
+      HA Cluster nodes.
+  os-public-hostname:
+    type: string
+    default:
+    description: |
+      The hostname or address of the public endpoints created for
+      openstack-dashboard.
+      .
+      This value will be used for public endpoints. For example, an
+      os-public-hostname set to 'horizon.example.com' with will create
+      the following public endpoint for the swift-proxy:
+      .
+      https://horizon.example.com/horizon
+  ssl_cert:
+    type: string
+    default:
+    description: |
+      Base64-encoded SSL certificate to install and use for Horizon.
+      .
+      juju set openstack-dashboard ssl_cert="$(cat cert| base64)" \
+                               ssl_key="$(cat key| base64)"
+  ssl_key:
+    type: string
+    default:
+    description: |
+      Base64-encoded SSL key to use with certificate specified as ssl_cert.
+  ssl_ca:
+    type: string
+    default:
+    description: |
+      Base64-encoded certificate authority. This CA is used in conjunction
+      with keystone https endpoints and must, therefore, be the same CA
+      used by any endpoint configured as https/ssl.
+  offline-compression:
+    type: string
+    default: "yes"
+    description: Use pre-generated Less compiled JS and CSS.
+  ubuntu-theme:
+    type: string
+    default: "yes"
+    description: Use Ubuntu theme for the dashboard.
+  default-theme:
+    type: string
+    default:
+    description: |
+      Specify path to theme to use (relative to
+      /usr/share/openstack-dashboard/openstack_dashboard/themes/).
+      .
+      NOTE: This setting is supported >= OpenStack Liberty and
+      this setting is mutually exclusive to ubuntu-theme.
+  custom-theme:
+    type: boolean
+    default: False
+    description: |
+      Use a custom theme supplied as a resource.
+      NOTE: This setting is supported >= OpenStack Mitaka and
+      this setting is mutually exclustive to ubuntu-theme and default-theme.
+  secret:
+    type: string
+    default:
+    description: |
+      Secret for Horizon to use when securing internal data; set this when
+      using multiple dashboard units.
+  dropdown-max-items:
+    type: int
+    default: 30
+    description: |
+      Max dropdown items to show in dropdown controls.
+      NOTE: This setting is supported >= OpenStack Liberty.
+  profile:
+    type: string
+    default:
+    description: Default profile for the dashboard. Eg. cisco.
+  disable-instance-snapshot:
+    type: boolean
+    default: False
+    description: |
+      This setting disables Snapshots as a valid boot source for launching
+      instances. Snapshots sources won’t show up in the Launch Instance modal
+      dialogue box.  This option works from the Newton release, and has no
+      effect on earlier OpenStack releases.
+  neutron-network-dvr:
+    type: boolean
+    default: False
+    description: |
+      Enable Neutron distributed virtual router (DVR) feature in the
+      Router panel.
+  neutron-network-l3ha:
+    type: boolean
+    default: False
+    description: |
+      Enable HA (High Availability) mode in Neutron virtual router in
+      the Router panel.
+  neutron-network-lb:
+    type: boolean
+    default: False
+    description: |
+      Enable neutron load balancer service panel.
+      .
+      NOTE: This configuration option only applies to OpenStack Stein and
+      earlier. Since OpenStack Train the Neutron load balancer components
+      have been replaced by Octavia.
+  neutron-network-firewall:
+    type: boolean
+    default: False
+    description: Enable neutron firewall service panel.
+  neutron-network-vpn:
+    type: boolean
+    default: False
+    description: Enable neutron vpn service panel.
+  cinder-backup:
+    type: boolean
+    default: False
+    description: Enable cinder backup panel.
+  password-retrieve:
+    type: boolean
+    default: False
+    description: Enable "Retrieve password" instance action.
+  prefer-ipv6:
+    type: boolean
+    default: False
+    description: |
+      If True enables IPv6 support. The charm will expect network
+      interfaces to be configured with an IPv6 address. If set to False
+      (default) IPv4 is expected.
+      .
+      NOTE: these charms do not currently support IPv6 privacy extension.
+      In order for this charm to function correctly, the privacy extension
+      must be disabled and a non-temporary address must be
+      configured/available on your network interface.
+  endpoint-type:
+    type: string
+    default:
+    description: |
+      Specifies the endpoint types to use for endpoints in the Keystone
+      service catalog. Valid values are 'publicURL', 'internalURL',
+      and 'adminURL'. Both the primary and secondary endpoint types can
+      be specified by providing multiple comma delimited values.
+  nagios_context:
+    type: string
+    default: "juju"
+    description: |
+      Used by the nrpe-external-master subordinate charm.
+      A string that will be prepended to instance name to set the host name
+      in nagios. So for instance the hostname would be something like:
+      .
+        juju-postgresql-0
+      .
+      If you're running multiple environments with the same services in them
+      this allows you to differentiate between them.
+  nagios_check_http_params:
+    type: string
+    default: "-H localhost -I 127.0.0.1 -u '/' -e 200,301,302"
+    description: Parameters to pass to the nrpe plugin check_http.
+  nagios_servicegroups:
+    type: string
+    default: ""
+    description: |
+      A comma-separated list of nagios servicegroups. If left empty, the
+      nagios_context will be used as the servicegroup.
+  haproxy-server-timeout:
+    type: int
+    default:
+    description: |
+      Server timeout configuration in ms for haproxy, used in HA
+      configurations. If not provided, default value of 90000ms is used.
+  haproxy-client-timeout:
+    type: int
+    default:
+    description: |
+      Client timeout configuration in ms for haproxy, used in HA
+      configurations. If not provided, default value of 90000ms is used.
+  haproxy-queue-timeout:
+    type: int
+    default:
+    description: |
+      Queue timeout configuration in ms for haproxy, used in HA
+      configurations. If not provided, default value of 9000ms is used.
+  haproxy-connect-timeout:
+    type: int
+    default:
+    description: |
+      Connect timeout configuration in ms for haproxy, used in HA
+      configurations. If not provided, default value of 9000ms is used.
+  haproxy-expose-stats:
+    type: boolean
+    default: False
+    description: |
+      If True, exposes stats interface externally.
+  enforce-ssl:
+    type: boolean
+    default: False
+    description: |
+      If True, redirects plain http requests to https port 443. For this option
+      to have an effect, SSL must be configured.
+  hsts-max-age-seconds:
+    type: int
+    default: 0
+    description: |
+      "max-age" parameter for HSTS(HTTP Strict Transport Security)
+      header. Use with caution since once you set this option, browsers
+      will remember it so they can only use HTTPS (HTTP connection won't
+      be allowed) until max-age expires.
+      .
+      An example value is one year (31536000). However, a shorter
+      max-age such as 24 hours (86400) is recommended during initial
+      rollout in case of any mistakes. For more details on HSTS, refer to:
+      https://developer.mozilla.org/docs/Web/Security/HTTP_strict_transport_security
+      .
+      For this option to have an effect, SSL must be configured and
+      enforce-ssl option must be true.
+  database-user:
+    type: string
+    default: horizon
+    description: Username for Horizon database access (if enabled).
+  database:
+    type: string
+    default: horizon
+    description: Database name for Horizon (if enabled).
+  customization-module:
+    type: string
+    default: ""
+    description: |
+      This option provides a means to enable customisation modules to modify
+      existing dashboards and panels. This is available from Liberty onwards.
+  allow-password-autocompletion:
+    type: boolean
+    default: False
+    description: |
+      Setting this to True will allow password form autocompletion by browser.
+  default-create-volume:
+    type: boolean
+    default: True
+    description: |
+      The default value for the option of creating a new volume in the
+      workflow for image and instance snapshot sources when launching an
+      instance. This option has an effect only to Ocata or newer
+      releases.
+  image-formats:
+    type: string
+    default: ""
+    description: |
+      The image-formats setting can be used to alter the default list of
+      advertised image formats.  Many installations cannot use all the formats
+      that Glance recognizes, restricting the list here prevents unwanted
+      formats from being listed in Horizon which can lead to confusion.
+      .
+      This setting takes a space separated list, for example: iso qcow2 raw
+      .
+      Supported formats are: aki, ami, ari, docker, iso, ova, qcow2, raw, vdi,
+      vhd, vmdk.
+      .
+      If not provided, leave the option unconfigured which enables all of the
+      above.
+  worker-multiplier:
+    type: float
+    default:
+    description: |
+      The CPU core multiplier to use when configuring worker processes for
+      Horizon. By default, the number of workers for each daemon is set to
+      twice the number of CPU cores a service unit has. When deployed in
+      a LXD container, this default value will be capped to 4 workers
+      unless this configuration option is set.
+  api-result-limit:
+    type:  int
+    default:
+    description: |
+      The maximum number of objects (e.g. Swift objects or Glance images) to
+      display on a single page before providing a paging element (a "more" link)
+      to paginate results.
+  enable-fip-topology-check:
+    type: boolean
+    default: true
+    description:
+      By default Horizon checks that a project has a router attached to an
+      external network before allowing FIPs to be attached to a VM. Some use
+      cases will not meet this constraint, e.g. if the router is owned by a
+      different project. Setting this to False removes this check from Horizon.
+  enable-consistency-groups:
+    type: boolean
+    default: false
+    description: |
+      By default Cinder does not enable the Consistency Groups feature. To
+      avoid having the Consistency Groups tabs on Horizon without the feature
+      enabled on Cinder, this also defaults to False. Setting this to True
+      will make the Consistency Groups tabs appear on the dashboard.
+      .
+      This option is supported for releases up to OpenStack Stein only. As of
+      OpenStack Train, consistency groups have been dropped and replaced by
+      the generic group feature. Setting this option for OpenStack Train or
+      above will not do anything.
+  use-policyd-override:
+    type: boolean
+    default: False
+    description: |
+      If True then use the resource named 'policyd-override' to install
+      override YAML files in the horizon's policy directories.  The resource
+      file should be a ZIP file containing YAML policy files.  These are to be
+      placed into directories that indicate the service that the policy file
+      belongs to.  Please see the README of the charm for further details.
+      .
+      If False then remove/disable any overrides in force.
+  disable-password-reveal:
+    type: boolean
+    default: false
+    description: |
+      If enabled, the reveal button for passwords is removed.

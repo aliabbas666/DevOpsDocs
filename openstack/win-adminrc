@@ -1,0 +1,12 @@
+$env:OS_PROJECT_DOMAIN_NAME = 'Default'
+$env:OS_USER_DOMAIN_NAME = 'Default'
+$env:OS_PROJECT_NAME = 'admin'
+$env:OS_TENANT_NAME = 'admin'
+$env:OS_USERNAME = 'admin'
+$env:OS_PASSWORD = 'epYz33kUlHfMySwLrW0CZHfeHGOnpdNttiZiQ1jh'
+$env:OS_AUTH_URL = 'http://10.82.3.66:35357/v3'
+$env:OS_INTERFACE = 'internal'
+$env:OS_ENDPOINT_TYPE = 'internalURL'
+$env:OS_IDENTITY_API_VERSION = '3'
+$env:OS_REGION_NAME = "RegionOne"
+$env:OS_AUTH_PLUGIN = 'password'

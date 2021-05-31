@@ -1,0 +1,12 @@
+.coverage
+bin
+tags
+.testrepository
+.tox
+*.sw[nop]
+*.pyc
+.unit-state.db
+.settings
+.stestr
+func-results.json
+tests/keystone_juju_ca_cert.crt

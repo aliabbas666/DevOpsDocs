@@ -1,0 +1,373 @@
+============================================================================================
+														monasca-docker resource create
+============================================================================================
+openstack project create --domain default --description "Monasca Project" mini-mon
+
+openstack user create --domain default --password 123 mini-mon
+openstack user create --domain default --password 123 monasca-agent
+
+openstack role create monasca-user
+openstack role create monasca-agent
+
+openstack role add --project mini-mon --user mini-mon monasca-user
+openstack role add --project mini-mon --user monasca-agent monasca-agent
+openstack role add --project mini-mon --user mini-mon admin
+openstack role add --project mini-mon --user monasca-agent admin
+
+openstack service create --name monasca --description "Monitoring Service" monitoring
+
+openstack endpoint create monitoring --region Riyadh public http://10.81.1.46:8070/v2.0 
+openstack endpoint create monitoring --region Riyadh internal http://10.81.1.46:8070/v2.0
+openstack endpoint create monitoring --region Riyadh admin http://10.81.1.46:8070/v2.0
+
+openstack project create mini-mon
+openstack project create demo
+openstack user create --password 123 mini-mon
+openstack user create --password 123 monasca-agent
+openstack user create --password 123 demo
+openstack user create --password 123 monasca-read-only-user
+openstack role create monasca-user
+openstack role add --p
+============================================================================================
+														kolla-monasca delete resource
+============================================================================================
+openstack project delete monasca_control_plane
+openstack service delete monasca-log-api monasca-api
+openstack role delete monasca-read-only-user
+openstack user delete monasca-agent monasca
+
+
+============================================================================================
+																start docker client
+============================================================================================
+
+
+
+
+============================================================================================
+                                   monascarc
+============================================================================================
+OS_AUTH_URL=http://10.81.1.155:5000/v3
+OS_PROJECT_ID=f5c112a0fa944494be24e9837108247f
+OS_PROJECT_NAME="mini-mon"
+OS_USER_DOMAIN_NAME="Default"
+OS_PROJECT_DOMAIN_ID="default"
+OS_USERNAME="mini-mon"
+OS_PASSWORD="123"
+OS_REGION_NAME="Riyadh"
+OS_INTERFACE=public
+OS_IDENTITY_API_VERSION=3
+
+
+============================================================================================
+																		monasca purge
+============================================================================================
+cat <<EOF >monasca-purge.sh
+#!/bin/bash
+sudo systemctl stop monasca-collector.service
+sudo systemctl stop monasca-forwarder.service
+sudo systemctl stop monasca-statsd.service
+sudo systemctl disable monasca-collector.service
+sudo systemctl disable monasca-forwarder.service
+sudo systemctl disable monasca-statsd.service
+sudo systemctl daemon-reload
+sudo systemctl reset-failed
+sudo rm -r /usr/lib/python2.7/site-packages/monasca*
+sudo rm -r /etc/monasca
+EOF
+
+============================================================================================
+																	install monasca-agent
+============================================================================================
+			<<<<< FOR RDO >>>>>																|					<<<<< FOR Rhosp >>>>>	
+cat <<EOF >install-monasca.sh														|		cat <<EOF >install-monsaca.sh
+#!/bin/bash																							|		#!/bin/bash
+sudo yum install -y python-pip 													|		sudo yum install -y gcc
+sudo yum install -y gcc python-devel										|		sudo pip3 install -upgrade pip
+sudo pip install --upgrade pip													|		sudo pip3 install monasca-agent --ignore-installed
+sudo pip install --upgrade setuptools										|		EOF
+sudo pip install monasca-agent --ignore-installed				|
+EOF																											|
+
+============================================================================================
+																	 start monasca-agent
+============================================================================================
+sudo monasca-setup \
+--keystone_url http://10.81.1.79:5000/v3 \
+--monasca_url http://10.81.1.46:8070/v2.0 \
+--username "monasca-agent" \
+--password "123" \
+--project_id "6186373b7cd04c878d4cee5810ef85fd" \
+--project_name "mini-mon" \
+--project_domain_id "default" \
+--project_domain_name "Default" \
+--user_domain_id "default" \
+--user_domain_name "Default" \
+--region_name "regionOne" \
+--insecure "true"	
+
+============================================================================================
+																	    add routes
+============================================================================================
+sudo ip route add 192.168.24.24  via 10.81.1.153
+sudo ip route add 172.16.2.4  via 10.81.1.153
+
+
+
+
+
+
+
+
+
+
+export OS_PROJECT_ID=f5c112a0fa944494be24e9837108247f
+
+
+export OS_AUTH_URL=http://localhost:5000
+export OS_PROJECT_NAME="admin"
+export OS_USER_DOMAIN_NAME="defalut"
+export OS_PROJECT_DOMAIN_ID="default"
+export OS_USERNAME="admin"
+export OS_PASSWORD="s3cr3t"
+export OS_REGION_NAME="RegionOne"
+export OS_INTERFACE=public
+export OS_IDENTITY_API_VERSION=3
+
+
+
+
+
+
+
+Select Top 1000000 tblAssets.AssetID,
+  tblAssets.AssetName,
+  tsysAssetTypes.AssetTypename As AssetType,
+  tsysAssetTypes.AssetTypeIcon10 As icon,
+  tblAssets.Domain,
+  Coalesce(tsysOS.OSname, tblLinuxSystem.OSRelease, tblMacOSInfo.SystemVersion)
+  As OS,
+  tblAssetCustom.Manufacturer,
+  tblAssets.IPAddress,
+  tsysIPLocations.IPLocation,
+  tblAssets.Mac As MACAddress,
+  tblState.Statename As State,
+  (Ceiling((tblAssets.Memory) / (1024))) As Memory,
+  tblAssets.NrProcessors,
+  tblAssets.Processor
+From tblAssets
+  Inner Join tblAssetCustom On tblAssets.AssetID = tblAssetCustom.AssetID
+  Inner Join tsysAssetTypes On tsysAssetTypes.AssetType = tblAssets.Assettype
+  Inner Join tsysIPLocations On tsysIPLocations.LocationID =
+    tblAssets.LocationID
+  Left Join tblADComputers On tblAssets.AssetID = tblADComputers.AssetID
+  Inner Join tblState On tblState.State = tblAssetCustom.State
+  Left Join tblLinuxSystem On tblAssets.AssetID = tblLinuxSystem.AssetID
+  Left Join tsysOS On tblAssets.OScode = tsysOS.OScode
+  Left Join tblMacOSInfo On tblAssets.AssetID = tblMacOSInfo.AssetID
+Where tblAssets.Assettype <> 66
+Order By tblAssets.AssetName
+
+
+Select Top 1000000 tblAssets.AssetID,
+  tblAssets.AssetName,
+  tblAssets.Lastseen As [last scan],
+  Sum(Cast(Cast(tblLinuxHardDisks.Size As BigInt) / 1024 / 1024 As Numeric)) As
+  [Total size (GB)]
+From tblAssets
+  Inner Join tblLinuxHardDisks On tblAssets.AssetID = tblLinuxHardDisks.AssetID
+Where tblLinuxHardDisks.MountedOn = '/'
+Group By tblAssets.AssetID,
+  tblAssets.AssetName,
+  tblAssets.Lastseen,
+  tblLinuxHardDisks.Size
+Order By tblAssets.AssetID
+
+
+
+
+
+
+
+
+
+
+
+Select Top 1000000 tblAssets.AssetID,
+  tblAssets.AssetName,
+  tsysAssetTypes.AssetTypename As AssetType,
+  tsysAssetTypes.AssetTypeIcon10 As icon,
+  tblAssets.Domain,
+  Coalesce(tsysOS.OSname, tblLinuxSystem.OSRelease, tblMacOSInfo.SystemVersion)
+  As OS,
+  tblAssetCustom.Manufacturer,
+  tblAssets.IPAddress,
+  tsysIPLocations.IPLocation,
+  tblAssets.Mac As MACAddress,
+  tblState.Statename As State,
+  (Ceiling((tblAssets.Memory) / (1024))) As Memory,
+  tblAssets.Processor,
+  Cast(Cast(tblLinuxHardDisks.Size As BigInt) / 1024 / 1024 As Numeric) As
+  [Total size (GB)]
+From tblAssets
+  Inner Join tblAssetCustom On tblAssets.AssetID = tblAssetCustom.AssetID
+  Inner Join tsysAssetTypes On tsysAssetTypes.AssetType = tblAssets.Assettype
+  Inner Join tsysIPLocations On tsysIPLocations.LocationID =
+    tblAssets.LocationID
+  Left Join tblADComputers On tblAssets.AssetID = tblADComputers.AssetID
+  Inner Join tblState On tblState.State = tblAssetCustom.State
+  Left Join tblLinuxSystem On tblAssets.AssetID = tblLinuxSystem.AssetID
+  Left Join tsysOS On tblAssets.OScode = tsysOS.OScode
+  Left Join tblMacOSInfo On tblAssets.AssetID = tblMacOSInfo.AssetID
+  Inner Join tblLinuxHardDisks On tblAssets.AssetID = tblLinuxHardDisks.AssetID
+Where (tblLinuxHardDisks.MountedOn = '/' And tblAssets.Assettype <> 66) Or
+  (tblLinuxHardDisks.MountedOn = 'tmpfs')
+Group By tblAssets.AssetID,
+  tblAssets.AssetName,
+  tsysAssetTypes.AssetTypename,
+  tsysAssetTypes.AssetTypeIcon10,
+  tblAssets.Domain,
+  Coalesce(tsysOS.OSname, tblLinuxSystem.OSRelease, tblMacOSInfo.SystemVersion),
+  tblAssetCustom.Manufacturer,
+  tblAssets.IPAddress,
+  tsysIPLocations.IPLocation,
+  tblAssets.Mac,
+  tblState.Statename,
+  (Ceiling((tblAssets.Memory) / (1024))),
+  tblAssets.Processor,
+  Cast(Cast(tblLinuxHardDisks.Size As BigInt) / 1024 / 1024 As Numeric),
+  tblAssets.NrProcessors,
+  tblLinuxHardDisks.MountedOn,
+  tblAssets.Assettype
+Order By tblAssets.AssetName
+
+
+
+
+
+
+
+
+Select Top 1000000 tblAssets.AssetID,
+  tblAssets.AssetName,
+  tsysAssetTypes.AssetTypename As AssetType,
+  tsysAssetTypes.AssetTypeIcon10 As icon,
+  tblAssets.Domain,
+  Coalesce(tsysOS.OSname, tblLinuxSystem.OSRelease, tblMacOSInfo.SystemVersion)
+  As OS,
+  tblAssetCustom.Manufacturer,
+  tblAssets.IPAddress,
+  tsysIPLocations.IPLocation,
+  tblAssets.Mac As MACAddress,
+  tblAssets.SP,
+  tblAssets.Lastseen,
+  tblAssets.Lasttried,
+  tblState.Statename As State,
+  (Ceiling((tblAssets.Memory) / (1024))) As Memory,
+  tblAssets.Processor,
+  Cast(Cast(tblLinuxHardDisks.Size As BigInt) / 1024 / 1024 As Numeric) As
+  [Total size (GB)]
+  tblDiskdrives.Caption As Drive,
+  Cast(tblDiskdrives.Size / 1024 / 1024 As numeric) As TotalSizeGB
+From tblAssets
+  Inner Join tblDiskdrives On tblAssets.AssetID = tblDiskdrives.AssetID
+  Inner Join tblAssetCustom On tblAssets.AssetID = tblAssetCustom.AssetID
+  Inner Join tblState On tblState.State = tblAssetCustom.State
+  Inner Join tsysAssetTypes On tsysAssetTypes.AssetType = tblAssets.Assettype
+  Inner Join tsysIPLocations On tsysIPLocations.LocationID =
+    tblAssets.LocationID
+  Left Join tsysOS On tblAssets.OScode = tsysOS.OScode
+  Inner Join tblAssetCustom On tblAssets.AssetID = tblAssetCustom.AssetID
+  Inner Join tsysAssetTypes On tsysAssetTypes.AssetType = tblAssets.Assettype
+  Inner Join tsysIPLocations On tsysIPLocations.LocationID =
+    tblAssets.LocationID
+  Left Join tblADComputers On tblAssets.AssetID = tblADComputers.AssetID
+  Inner Join tblState On tblState.State = tblAssetCustom.State
+  Left Join tblLinuxSystem On tblAssets.AssetID = tblLinuxSystem.AssetID
+  Left Join tsysOS On tblAssets.OScode = tsysOS.OScode
+  Left Join tblMacOSInfo On tblAssets.AssetID = tblMacOSInfo.AssetID
+  Inner Join tblLinuxHardDisks On tblAssets.AssetID = tblLinuxHardDisks.AssetID
+Where (tblLinuxHardDisks.MountedOn = '/' And tblAssets.Assettype <> 66) Or
+  (tblLinuxHardDisks.MountedOn = 'tmpfs')
+Group By tblAssets.AssetID,
+  tblAssets.AssetName,
+  tsysAssetTypes.AssetTypename,
+  tsysAssetTypes.AssetTypeIcon10,
+  tblAssets.Domain,
+  Coalesce(tsysOS.OSname, tblLinuxSystem.OSRelease, tblMacOSInfo.SystemVersion),
+  tblAssetCustom.Manufacturer,
+  tblAssets.IPAddress,
+  tsysIPLocations.IPLocation,
+  tblAssets.Mac,
+  tblState.Statename,
+  (Ceiling((tblAssets.Memory) / (1024))),
+  tblAssets.Processor,
+  Cast(Cast(tblLinuxHardDisks.Size As BigInt) / 1024 / 1024 As Numeric),
+  tblAssets.NrProcessors,
+  tblLinuxHardDisks.MountedOn,
+  tblAssets.Assettype
+Order By tblAssets.AssetName
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

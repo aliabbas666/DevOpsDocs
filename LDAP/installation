@@ -1,0 +1,88 @@
+=========================================================================================
+																Install LDAP
+=========================================================================================
+sudo apt-get install slapd ldap-utils -y
+sudo dpkg-reconfigure slapd
+=========================================================================================
+																LDAP Commads
+=========================================================================================																
+ldappasswd -s letmein -W -D "cn=admin,dc=ivolve,dc=io" -x "uid=svc-ldap,ou=People,dc=ivolve,dc=io"
+ldapadd -x -W -D "cn=admin,dc=ivolve,dc=io" -f newuser.ldif
+ldapmodify -x -W -D "cn=admin,dc=ivolve,dc=io" -f addgroup.ldif
+ldapsearch -x -W -D "cn=svc-ldap,ou=User,dc=ivolve,dc=io" -p 389 -h 10.81.1.60 -b "dc=ivolve,dc=io" -s sub "(objectclass=*)"
+ldapsearch -x -W -D "cn=admin,dc=ivolve,dc=io" -p 389 -h 10.81.1.60 -b "dc=ivolve,dc=io" -s sub "(objectclass=*)"
+=========================================================================================
+																Basic Ldap Configuration
+=========================================================================================
+dn: ou=Group,dc=ivolve,dc=io
+objectClass: top
+objectClass: organizationalUnit
+ou: Group
+
+dn: ou=User,dc=ivolve,dc=io
+objectClass: top
+objectClass: organizationalUnit
+ou: User
+
+dn: cn=grp-openstack,ou=Group,dc=ivolve,dc=io
+objectClass: groupOfNames
+cn: grp-openstack
+member: uid=svc-ldap,ou=User,dc=ivolve,dc=io
+
+dn: cn=ldap-users,ou=Group,dc=ivolve,dc=io
+objectClass: groupOfNames
+cn: ldap-users
+member: uid=svc-ldap,ou=User,dc=ivolve,dc=io
+
+dn: uid=svc-ldap,ou=User,dc=ivolve,dc=io
+uid: svc-ldap
+objectClass: top
+objectClass: simpleSecurityObject
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+sn: svc-ldap
+cn: svc-ldap
+userPassword: {SSHA}MZHxnIPpgvIXy2b9MirUcmuzh4RJCgYg
+=========================================================================================
+																Add User to Existing Group
+=========================================================================================																
+dn: cn=ldap-users,ou=Group,dc=ivolve,dc=io
+changetype: modify
+add: member
+member: uid=bilal-ldap,ou=User,dc=ivolve,dc=io
+=========================================================================================
+																Keystone Configuration
+=========================================================================================																
+[ldap]
+
+url                      = ldap://10.81.1.60
+user                     = CN=admin,DC=ivolve,DC=io
+password                 = letmein
+suffix                   = DC=ivolve,DC=io
+
+user_tree_dn             = OU=User,DC=ivolve,DC=io
+user_objectclass         = inetOrgPerson
+user_id_attribute        = cn
+user_name_attribute      = sn
+user_mail_attribute      = mail
+user_pass_attribute      = userPassword
+user_enabled_attribute   = userAccountControl
+user_enabled_mask        = 2
+user_enabled_default     = 512
+
+group_objectclass        = groupOfNames
+group_tree_dn            = OU=Group,DC=ivolve,DC=io
+group_id_attribute       = cn
+group_name_attribute     = cn
+
+query_scope              = sub
+chase_referrals          = false
+
+[identity]
+driver = ldap
+=========================================================================================
+																References
+=========================================================================================	
+https://docs.openstack.org/keystone/train/admin/configuration.html
+https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/15/html-single/integrate_with_identity_service/index															

@@ -1,0 +1,21 @@
+includes:
+  - layer:openstack
+  - layer:leadership
+  - interface:nrpe-external-master
+  - interface:ovsdb
+  - interface:ovsdb-cluster
+  - interface:ovsdb-cms
+options:
+  basic:
+    use_venv: True
+    include_system_packages: False
+repo: https://opendev.org/x/charm-ovn-central
+config:
+  deletes:
+    - debug
+    - ssl_ca
+    - ssl_cert
+    - ssl_key
+    - use-internal-endpoints
+    - use-syslog
+    - verbose

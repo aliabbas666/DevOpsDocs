@@ -1,0 +1,16 @@
+vim /etc/swift/proxy-server.conf
+
+commentout  this line:	pipeline = catch_errors gatekeeper healthcheck proxy-logging cache container_sync bulk tempurl ratelimit tempauth copy container-quotas account-quotas slo dlo versioned_writes proxy-logging proxy-server
+
+uncomment this line:	pipeline = catch_errors gatekeeper healthcheck proxy-logging cache container_sync bulk tempurl ratelimit authtoken keystone copy container_quotas account_quotas slo dlo versioned_writes proxy-logging proxy-server
+
+vim /etc/swift/object-server.conf
+
+under [object-updater] section add this line: interval = 1
+
+vim /etc/swift/container-server.conf
+
+under [container-updater] section add this line: interval = 1
+
+systemctl restart openstack-swift*
+systemctl status openstac-swift* [ check status of all swift services. All services should be in active state]

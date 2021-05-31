@@ -1,0 +1,53 @@
+51.222.111.146/24
+158.69.35.92/30
+
+
+158.69.35.93 02:00:00:7c:34:1c
+158.69.35.94 02:00:00:09:ad:36
+
+
+	
+openstack network create \
+	--provider-network-type flat \
+	--provider-physical-network physnet1 \
+	--external 
+	public_network
+
+openstack subnet create \
+	--network public_network \
+	--dhcp \
+	--allocation-pool start=158.69.35.93,end=158.69.35.94 \
+	--gateway 51.222.111.254 \
+	--dns-nameserver 8.8.8.8 \
+	--subnet-range 158.69.35.92/3 public_subnet
+	
+openstack port create \
+	--network 467c583c-a325-4292-9774-3c1588facc8d \
+	--mac-address 02:00:00:7c:34:1c \
+	--fixed-ip ip-address=158.69.35.93
+	myport
+	
+openstack server create \
+	--flavor m1.medium \
+	--image Centos7 \
+	--nic port-id=624db221-7b63-4bca-a41f-65cf82e51cd2 
+	test
+	
+###### Run Following inside VM ######
+cat <<EOF > /etc/sysconfig/network-scripts/ifcfg-eth0
+TYPE=Ethernet
+BOOTPROTO=none
+IPV6INIT=no
+NAME=eth0
+DEVICE=eth0
+ONBOOT=yes
+USERCTL=no
+PEERDNS=yes
+NETMASK=255.255.255.255
+IPADDR=158.69.35.93
+GATEWAY=51.222.11.254
+ARP=yes
+HWADDR=02:00:00:7c:34:1c
+EOF
+
+ip route flush all; ip addr flush dev eth0; systemctl restart network

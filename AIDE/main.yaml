@@ -1,0 +1,23 @@
+---
+- hosts: all
+  become: true
+  user: ubuntu
+  gather_facts: false
+  vars_files:
+    - ./actions.yaml
+  
+  tasks:
+    - name: Adding Aide Installation Role
+      include_role:
+        name: install
+      when: "install == 'Y'"
+    
+    - name: Adding Aide Update Role
+      include_role:
+        name: update
+      when: "update == 'Y'"
+    
+    - name: Adding Aide Check Role
+      include_role:
+        name: check
+      when: "check == 'Y'"

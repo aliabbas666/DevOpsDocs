@@ -1,0 +1,28 @@
+charm_name: hacluster
+
+smoke_bundles:
+  - bionic-train
+gate_bundles:
+  - trusty-mitaka
+  - xenial-mitaka
+  - xenial-ocata
+  - xenial-pike
+  - xenial-queens
+  - bionic-queens
+  - bionic-rocky
+  - bionic-stein
+  - bionic-train
+  - bionic-ussuri
+  - focal-ussuri
+  - focal-victoria
+  - groovy-victoria
+
+configure:
+  - zaza.openstack.charm_tests.keystone.setup.add_demo_user
+
+tests:
+  - zaza.openstack.charm_tests.hacluster.tests.HaclusterTest
+
+tests_options:
+  force_deploy:
+    - groovy-victoria

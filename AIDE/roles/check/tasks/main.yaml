@@ -1,0 +1,7 @@
+- name: Checking Files Integrity
+  command: aide -c /etc/aide/aide.conf --check
+  register: output
+  failed_when: output.rc != 0 and output.rc != 1 and output and output.rc != 4 and output.rc != 7
+  changed_when: output.rc == 1 or output == 2 or output.rc == 4
+  ignore_errors: true
+- debug: msg="{{output.stdout_lines}}"

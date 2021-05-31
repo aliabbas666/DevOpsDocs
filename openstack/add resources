@@ -1,0 +1,93 @@
+============================================================================================
+																	    create image
+============================================================================================
+
+openstack image create "windows2012" --property hypervisor_type=hyperv --property hw_machine_type="hyperv-gen2" --file windows_server_2012_r2_standard_eval_hyperv_20170321.vhdx --disk-format vhd --container-format bare --public
+
+openstack image set     --property hw_machine_type=hyperv-gen2 --property os_type=windows  --property os_secure_boot=required 
+
+glance image-create --property hypervisor_type=hyperv --name "Windows Server 2012 R2 Std Eval" --container-format bare --disk-format vhd
+  
+============================================================================================
+																	    add/edit image tag
+============================================================================================
+ 
+openstack image set --tag Linux CentOS7
+openstack image unset --tag Linux Centos
+
+============================================================================================
+																	    add user
+============================================================================================
+
+openstack user create --password 123 ahmed
+
+============================================================================================
+																	    add role
+============================================================================================
+
+openstack role add --user  usman --project admin _member_
+
+============================================================================================
+																	    create project
+============================================================================================
+
+openstack project create dev
+
+openstack user list --project dev
+
+
+
+
+ovsdb-server --remote=tcp:127.0.0.1:6640 \
+--remote=db:Open_vSwitch,Open_vSwitch,manager_options \
+--private-key=db:Open_vSwitch,SSL,private_key \
+--certificate=db:Open_vSwitch,SSL,certificate \
+--bootstrap-ca-cert=db:Open_vSwitch,SSL,ca_cert \
+--pidfile --detach --log-file
+
+
+
+
+ovsdb-server --pidfile --remote=tcp:6640:127.0.0.1 --remote=unix:C:\ProgramData\openvswitch\db.sock  --remote=db:Open_vSwitch,Manager,target
+
+
+
+[DEFAULT]
+control_exchange = neutron
+transport_url = rabbit://openstack:JmrqwfJ0XCGHRXU05q1CB7xNiFNaovQgnH74N27k@10.82.3.66:5672
+use_eventlog = false
+log_dir = D:\OpenStack\Log\
+log_file = neutron-ovs-agent.log
+
+[AGENT]
+enable_metrics_collection = false
+tunnel_types = vxlan
+
+[SECURITYGROUP]
+firewall_driver = openvswitch
+enable_security_group = true
+
+[ovs]
+local_ip = 10.0.0.10
+integration_bridge = br-int
+tenant_network_type = vxlan
+ovsdb_connection = tcp:127.0.0.1:6640
+enable_tunneling = true
+tunnel_bridge = br-tun
+
+
+
+
+  65 ovsdb-server --pidfile --remote=tcp:6640:127.0.0.1 --remote=unix:C:\ProgramData\openvswitch\db.sock  --remote=db:Open_vSwitch,Manager,target
+  66 Get-Service neutron-ovs-agent
+  67 restart-Service neutron-ovs-agent
+  68 Get-Service neutron-ovs-agent
+
+
+Ok. That would work.
+Openvswitch(ovs) has openflow rules that learn target mac by send broadcast traffic to all tenant VMs. Sometimes it cause connectivity issues. This can be solved by ovs hardware offloading, which is not an option in your case. Workaround for this problem is we use diffrent interfaces for management and public ip traffic. 
+Tbh, i don't know about it. But if you have some knowledge about this we can work something out.  
+
+
+
+

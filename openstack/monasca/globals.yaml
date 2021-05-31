@@ -1,0 +1,26 @@
+kolla_base_distro: "centos"
+kolla_install_type: "source"
+openstack_release: "ussuri"
+kolla_internal_vip_address: "10.81.1.69"
+network_interface: "ens160"
+openstack_region_name: "Riyadh"
+enable_openstack_core: "no"
+enable_haproxy: "no"
+enable_rabbitmq: "no"
+enable_monasca: "yes"
+enable_keystone: //delete this line
+
+sudo ip route add 192.168.24.24  via 10.81.1.153
+sudo ip route add 172.16.2.4  via 10.81.1.153
+
+sudo ip route add 192.168.24.24  via 10.81.1.9
+
+keystone_admin_url: "http://192.168.24.24:35357"
+keystone_internal_url: "http://172.16.2.4:5000"
+monasca_openstack_auth:
+  auth_url: "http://10.81.1.155:5000"
+  username: "admin"
+  password: "MdNBX8cQMHw2xEbTGODVz6Udy"
+  project_name: "admin"
+  domain_name: "Default"
+  user_domain_name: "Default"

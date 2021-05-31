@@ -1,0 +1,13 @@
+bin
+revision
+.coverage*
+.venv
+.tox
+.testrepository
+*.sw[nop]
+*.pyc
+__pycache__/
+.project
+.pydevproject
+.stestr
+.unit-state.db

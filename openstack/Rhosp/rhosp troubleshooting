@@ -1,0 +1,5 @@
+Failed to discover available identity versions when contacting http://10.81.1.150:5000. Attempting to parse version from URL.                                                         
+Could not find versioned identity endpoints when attempting to authenticate. Please check that your auth_url is correct. Unable to establish connection to http://10.81.1.150:5000: HTTPConnectionPool(host='10.81.1.150', port=5000): Max retries exceeded with url: / (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fdb6d1861d0>: Failed to establish a new connection: [Errno 113] No route to host',))
+
+pcs status
+pcs resource refresh --force

@@ -1,0 +1,12 @@
+netifaces
+hvac<0.7.0
+tenacity
+pbr
+psycopg2
+requests
+
+psutil
+
+git+https://opendev.org/openstack/charms.openstack.git@stable/21.01#egg=charms.openstack
+
+git+https://github.com/juju/charm-helpers.git@stable/21.01#egg=charmhelpers

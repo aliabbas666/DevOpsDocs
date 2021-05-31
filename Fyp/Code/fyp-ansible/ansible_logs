@@ -1,0 +1,457 @@
+PLAY [controller] ****************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ***********************************************************************************************************************************************************************
+ok: [10.81.1.45]
+
+TASK [set_env_controller : update repository] ************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : installing ifupdown] **********************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : Network Configuring] **********************************************************************************************************************************************
+changed: [10.81.1.45] => (item={'src': 'hostname.j2', 'dest': '/etc/hostname'})
+changed: [10.81.1.45] => (item={'src': 'hosts.j2', 'dest': '/etc/hosts'})
+changed: [10.81.1.45] => (item={'src': 'interfaces.j2', 'dest': '/etc/network/interfaces'})
+
+TASK [set_env_controller : Rebooting machine] ************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : Installing Chrony] ************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : Configuring NTP] **************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : Restarting NTP] ***************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : Sync Time] ********************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : Adding Openstack Repo] ********************************************************************************************************************************************
+ok: [10.81.1.45]
+
+TASK [set_env_controller : Adding Repo] ******************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : Updating all packages to the latest version] **********************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : Installing Python-Client] *****************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : Installing Database] **********************************************************************************************************************************************
+changed: [10.81.1.45] => (item=mariadb-server)
+changed: [10.81.1.45] => (item=python-pymysql)
+changed: [10.81.1.45] => (item=python3-pymysql)
+changed: [10.81.1.45] => (item=python-apt)
+ok: [10.81.1.45] => (item=python3-apt)
+
+TASK [set_env_controller : Configuring Database] *********************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : Restarting MySQL] *************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : Installing RabbitMQ] **********************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : Restarting RabbitMQ] **********************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : Configuring RabbitMQ] *********************************************************************************************************************************************
+changed: [10.81.1.45] => (item=rabbitmqctl add_user openstack RABBIT_PASS)
+changed: [10.81.1.45] => (item=rabbitmqctl set_permissions openstack ".*" ".*" ".*")
+
+TASK [set_env_controller : Installing Memcached] *********************************************************************************************************************************************
+changed: [10.81.1.45] => (item=memcached)
+changed: [10.81.1.45] => (item=python-memcache)
+
+TASK [set_env_controller : Configuring Memcached] ********************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : Restarting Memcached] *********************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : Installing Etcd] **************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : Confguring Etcd] **************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [set_env_controller : Enabling & Restarting Etcd] ***************************************************************************************************************************************
+changed: [10.81.1.45]
+
+PLAY [compute] *******************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ***********************************************************************************************************************************************************************
+ok: [10.81.1.47]
+
+TASK [set_env_compute : update repository] ***************************************************************************************************************************************************
+changed: [10.81.1.47]
+
+TASK [set_env_compute : installing ifupdown] *************************************************************************************************************************************************
+changed: [10.81.1.47]
+
+TASK [set_env_compute : Network Configuring] *************************************************************************************************************************************************
+changed: [10.81.1.47] => (item={'src': 'hostname.j2', 'dest': '/etc/hostname'})
+changed: [10.81.1.47] => (item={'src': 'hosts.j2', 'dest': '/etc/hosts'})
+changed: [10.81.1.47] => (item={'src': 'interfaces.j2', 'dest': '/etc/network/interfaces'})
+
+TASK [set_env_compute : Rebooting machine] ***************************************************************************************************************************************************
+changed: [10.81.1.47]
+
+TASK [set_env_compute : Installing Chrony] ***************************************************************************************************************************************************
+changed: [10.81.1.47]
+
+TASK [set_env_compute : Configuring Chrony] **************************************************************************************************************************************************
+changed: [10.81.1.47]
+
+TASK [set_env_compute : Restarting NTP] ******************************************************************************************************************************************************
+changed: [10.81.1.47]
+
+TASK [set_env_compute : Sync Time] ***********************************************************************************************************************************************************
+changed: [10.81.1.47]
+
+PLAY [controller] ****************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ***********************************************************************************************************************************************************************
+ok: [10.81.1.45]
+
+TASK [keystone : create DB] ******************************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [keystone : adding user and granting privileges] ****************************************************************************************************************************************
+changed: [10.81.1.45] => (item=localhost)
+changed: [10.81.1.45] => (item=%)
+[WARNING]: Module did not set no_log for update_password
+
+TASK [keystone : installing pakages] *********************************************************************************************************************************************************
+changed: [10.81.1.45] => (item=keystone)
+ok: [10.81.1.45] => (item=apache2)
+ok: [10.81.1.45] => (item=libapache2-mod-wsgi)
+
+TASK [keystone : setting up conf file] *******************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [keystone : setting up conf file1] ******************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [keystone : populating keystone database] ***********************************************************************************************************************************************
+[WARNING]: Consider using 'become', 'become_method', and 'become_user' rather than running su
+changed: [10.81.1.45]
+
+TASK [keystone : initializing repos] *********************************************************************************************************************************************************
+changed: [10.81.1.45] => (item=keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone)
+changed: [10.81.1.45] => (item=keystone-manage credential_setup --keystone-user keystone --keystone-group keystone)
+
+TASK [keystone : bootstrap identity service] *************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [keystone : configure apache2] **********************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [keystone : restart apache2] ************************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [keystone : creating domain, project, user and roles] ***********************************************************************************************************************************
+changed: [10.81.1.45] => (item=openstack domain create --description "An Example Domain" example)
+changed: [10.81.1.45] => (item=openstack project create --domain default --description "Service Project" service)
+changed: [10.81.1.45] => (item=openstack project create --domain default --description "Demo Project" myproject)
+changed: [10.81.1.45] => (item=openstack user create --domain default --password 123 myuser)
+changed: [10.81.1.45] => (item=openstack role create myrole)
+changed: [10.81.1.45] => (item=openstack role add --project myproject --user myuser myrole)
+
+TASK [keystone : varifying operation] ********************************************************************************************************************************************************
+changed: [10.81.1.45] => (item=openstack --os-auth-url http://controller:5000/v3 --os-project-domain-name Default --os-user-domain-name Default --os-project-name admin --os-username admin --os-password ADMIN_PASS token issue)
+changed: [10.81.1.45] => (item=openstack --os-auth-url http://controller:5000/v3 --os-project-domain-name Default --os-user-domain-name Default --os-project-name myproject --os-username myuser --os-password 123 token issue)
+
+TASK [keystone : creating scripts] ***********************************************************************************************************************************************************
+changed: [10.81.1.45] => (item={'src': '~/fyp/ansible/roles/keystone/files/admin-openrc', 'dest': '~/admin-openrc'})
+changed: [10.81.1.45] => (item={'src': '~/fyp/ansible/roles/keystone/files/demo-openrc', 'dest': '~/demo-openrc'})
+
+TASK [glance : create DB] ********************************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [glance : adding user and granting privileges] ******************************************************************************************************************************************
+changed: [10.81.1.45] => (item=localhost)
+changed: [10.81.1.45] => (item=%)
+
+TASK [glance : creating glance user, entity and API endpoints] *******************************************************************************************************************************
+changed: [10.81.1.45] => (item=openstack user create --domain default --password 123 glance)
+changed: [10.81.1.45] => (item=openstack role add --project service --user glance admin)
+changed: [10.81.1.45] => (item=openstack service create --name glance --description "OpenStack Image" image)
+changed: [10.81.1.45] => (item=openstack endpoint create --region RegionOne image public http://controller:9292)
+changed: [10.81.1.45] => (item=openstack endpoint create --region RegionOne image internal http://controller:9292)
+changed: [10.81.1.45] => (item=openstack endpoint create --region RegionOne image admin http://controller:9292)
+
+TASK [glance : installing glance] ************************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [glance : configuring glance] ***********************************************************************************************************************************************************
+changed: [10.81.1.45] => (item=/etc/glance/glance-api.conf)
+changed: [10.81.1.45] => (item=/etc/glance/glance-registry.conf)
+
+TASK [glance : configuring glance 1] *********************************************************************************************************************************************************
+changed: [10.81.1.45] => (item={'path': '/etc/glance/glance-api.conf', 'blk': 'www_authenticate_uri = http://controller:5000\nauth_url = http://controller:5000\nmemcached_servers = controller:11211\nauth_type = password\nproject_domain_name = Default\nuser_domain_name = Default\nproject_name = service\nusername = glance\npassword = 123', 'insaft': '\\[keystone_authtoken\\]'})
+changed: [10.81.1.45] => (item={'path': '/etc/glance/glance-api.conf', 'blk': 'flavor = keystone', 'insaft': '\\[paste_deploy\\]'})
+changed: [10.81.1.45] => (item={'path': '/etc/glance/glance-api.conf', 'blk': 'stores = file,http\ndefault_store = file\nfilesystem_store_datadir = /var/lib/glance/imadges/', 'insaft': '\\[glance_store\\]'})
+changed: [10.81.1.45] => (item={'path': '/etc/glance/glance-registry.conf', 'blk': 'www_authenticate_uri = http://controller:5000\nauth_url = http://controller:5000\nmemcached_servers = controller:11211\nauth_type = password\nproject_domain_name = Default\nuser_domain_name = Default\nproject_name = service\nusername = glance\npassword = 123', 'insaft': '\\[keystone_authtoken\\]'})
+changed: [10.81.1.45] => (item={'path': '/etc/glance/glance-registry.conf', 'blk': 'flavor = keystone', 'insaft': '\\[paste_deploy\\]'})
+
+TASK [glance : populating image service database] ********************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [glance : restart images service] *******************************************************************************************************************************************************
+changed: [10.81.1.45] => (item=glance-registry)
+changed: [10.81.1.45] => (item=glance-api)
+
+TASK [glance : downloading cirrOS image] *****************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [glance : creating image] ***************************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [nova : Creating Databases] *************************************************************************************************************************************************************
+changed: [10.81.1.45] => (item=nova_api)
+changed: [10.81.1.45] => (item=nova)
+changed: [10.81.1.45] => (item=nova_cell0)
+changed: [10.81.1.45] => (item=placement)
+
+TASK [nova : adding user and granting privileges] ********************************************************************************************************************************************
+changed: [10.81.1.45] => (item={'name': 'nova', 'pass': 'NOVA_DBPASS', 'host': 'localhost'})
+changed: [10.81.1.45] => (item={'name': 'nova', 'pass': 'NOVA_DBPASS', 'host': '%'})
+changed: [10.81.1.45] => (item={'name': 'placement', 'pass': 'PLACEMENT_DBPASS', 'host': 'localhost'})
+changed: [10.81.1.45] => (item={'name': 'placement', 'pass': 'PLACEMENT_DBPASS', 'host': '%'})
+
+TASK [nova : Creating the Compute service credentials] ***************************************************************************************************************************************
+changed: [10.81.1.45] => (item=openstack user create --domain default --password 123 nova)
+changed: [10.81.1.45] => (item=openstack role add --project service --user nova admin)
+changed: [10.81.1.45] => (item=openstack service create --name nova --description "OpenStack Compute" compute)
+changed: [10.81.1.45] => (item=openstack endpoint create --region RegionOne compute public http://controller:8774/v2.1)
+changed: [10.81.1.45] => (item=openstack endpoint create --region RegionOne compute internal http://controller:8774/v2.1)
+changed: [10.81.1.45] => (item=openstack endpoint create --region RegionOne compute admin http://controller:8774/v2.1)
+changed: [10.81.1.45] => (item=openstack user create --domain default --password 123 placement)
+changed: [10.81.1.45] => (item=openstack role add --project service --user placement admin)
+changed: [10.81.1.45] => (item=openstack service create --name placement --description "Placement API" placement)
+changed: [10.81.1.45] => (item=openstack endpoint create --region RegionOne placement public http://controller:8778)
+changed: [10.81.1.45] => (item=openstack endpoint create --region RegionOne placement internal http://controller:8778)
+changed: [10.81.1.45] => (item=openstack endpoint create --region RegionOne placement admin http://controller:8778)
+
+TASK [nova : installing compute pakages] *****************************************************************************************************************************************************
+changed: [10.81.1.45] => (item=nova-api)
+changed: [10.81.1.45] => (item=nova-conductor)
+changed: [10.81.1.45] => (item=nova-consoleauth)
+changed: [10.81.1.45] => (item=nova-novncproxy)
+changed: [10.81.1.45] => (item=nova-scheduler)
+changed: [10.81.1.45] => (item=nova-placement-api)
+
+TASK [nova : Configuring Database Connection-String] *****************************************************************************************************************************************
+changed: [10.81.1.45] => (item={'after': '\\[api_database\\]', 'regexp': 'connection\\s+\\=\\s+sqlite\\:////var/lib/nova/nova_api\\.sqlite', 'replace': 'connection = mysql+pymysql://nova:NOVA_DBPASS@controller/nova_api'})
+changed: [10.81.1.45] => (item={'after': '\\[database\\]', 'regexp': 'connection\\s+\\=\\s+sqlite\\:////var/lib/nova/nova\\.sqlite', 'replace': 'connection = mysql+pymysql://nova:NOVA_DBPASS@controller/nova'})
+
+TASK [nova : Configuring nova.conf] **********************************************************************************************************************************************************
+changed: [10.81.1.45] => (item={'line': 'connection = mysql+pymysql://placement:PLACEMENT_DBPASS@controller/placement', 'insafter': '\\[placement_database\\]'})
+changed: [10.81.1.45] => (item={'line': 'auth_strategy = keystone', 'insafter': '\\[api\\]'})
+changed: [10.81.1.45] => (item={'line': 'api_servers = http://controller:9292', 'insafter': '\\[glance\\]'})
+changed: [10.81.1.45] => (item={'line': 'lock_path = /var/lib/nova/tmp', 'insafter': '\\[oslo_concurrency\\]'})
+
+TASK [nova : Deleting Default Configuration] *************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [nova : Adding Default Configuration] ***************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [nova : Configuring nova.conf] **********************************************************************************************************************************************************
+changed: [10.81.1.45] => (item={'blk': 'auth_url = http://controller:5000/v3\nmemcached_servers = controller:11211\nauth_type = password\nproject_domain_name = Default\nuser_domain_name = Default\nproject_name = service\nusername = nova\npassword = 123', 'insaft': '\\[keystone_authtoken\\]'})
+changed: [10.81.1.45] => (item={'blk': 'enabled = true\nserver_listen = $my_ip\nserver_proxyclient_address = $my_ip', 'insaft': '\\[vnc\\]'})
+changed: [10.81.1.45] => (item={'blk': 'region_name = RegionOne\nproject_domain_name = Default\nproject_name = service\nauth_type = password\nuser_domain_name = Default\nauth_url = http://controller:5000/v3\nusername = placement\npassword = 123', 'insaft': '\\[placement\\]'})
+changed: [10.81.1.45] => (item={'blk': 'url = http://controller:9696\nauth_url = http://controller:5000\nauth_type = password\nproject_domain_name = default\nuser_domain_name = default\nregion_name = RegionOne\nproject_name = service\nusername = neutron\npassword = 123\nservice_metadata_proxy = true\nmetadata_proxy_shared_secret = METADATA_SECRET', 'insaft': '\\[neutron\\]'})
+
+TASK [nova : Populating nova-api and placement database] *************************************************************************************************************************************
+changed: [10.81.1.45] => (item=su -s /bin/sh -c "nova-manage api_db sync" nova)
+changed: [10.81.1.45] => (item=su -s /bin/sh -c "nova-manage cell_v2 map_cell0" nova)
+changed: [10.81.1.45] => (item=su -s /bin/sh -c "nova-manage cell_v2 create_cell --name=cell1 --verbose" nova)
+changed: [10.81.1.45] => (item=su -s /bin/sh -c "nova-manage db sync" nova)
+changed: [10.81.1.45] => (item=su -s /bin/sh -c "nova-manage cell_v2 list_cells" nova)
+
+TASK [nova : Restarting Compute Services] ****************************************************************************************************************************************************
+changed: [10.81.1.45] => (item={'name': 'nova-api', 'state': 'restarted'})
+changed: [10.81.1.45] => (item={'name': 'nova-consoleauth', 'state': 'restarted'})
+changed: [10.81.1.45] => (item={'name': 'nova-scheduler', 'state': 'restarted'})
+changed: [10.81.1.45] => (item={'name': 'nova-conductor', 'state': 'restarted'})
+changed: [10.81.1.45] => (item={'name': 'nova-novncproxy', 'state': 'restarted'})
+
+PLAY [compute] *******************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ***********************************************************************************************************************************************************************
+ok: [10.81.1.47]
+
+TASK [nova : Installing Nova-Compute] ********************************************************************************************************************************************************
+changed: [10.81.1.47]
+
+TASK [nova : Deleting Default Configuration] *************************************************************************************************************************************************
+changed: [10.81.1.47]
+
+TASK [nova : Adding Default Configuration] ***************************************************************************************************************************************************
+changed: [10.81.1.47]
+
+TASK [nova : Configuring nova.conf] **********************************************************************************************************************************************************
+changed: [10.81.1.47] => (item={'blk': 'auth_url = http://controller:5000/v3\nmemcached_servers = controller:11211\nauth_type = password\nproject_domain_name = Default\nuser_domain_name = Default\nproject_name = service\nusername = nova\npassword = 123', 'insaft': '\\[keystone_authtoken\\]'})
+changed: [10.81.1.47] => (item={'blk': 'enabled = true\nserver_listen = 0.0.0.0\nserver_proxyclient_address = $my_ip\nnovncproxy_base_url = http://controller:6080/vnc_auto.html', 'insaft': '\\[vnc\\]'})
+changed: [10.81.1.47] => (item={'blk': 'region_name = RegionOne\nproject_domain_name = Default\nproject_name = service\nauth_type = password\nuser_domain_name = Default\nauth_url = http://controller:5000/v3\nusername = placement\npassword = 123', 'insaft': '\\[placement\\]'})
+changed: [10.81.1.47] => (item={'blk': 'url = http://controller:9696\nauth_url = http://controller:5000\nauth_type = password\nproject_domain_name = default\nuser_domain_name = default\nregion_name = RegionOne\nproject_name = service\nusername = neutron\npassword = 123', 'insaft': '\\[neutron\\]'})
+
+TASK [nova : Configuring nova.conf 1] ********************************************************************************************************************************************************
+changed: [10.81.1.47] => (item={'line': 'auth_strategy = keystone', 'insaft': '\\[api\\]'})
+changed: [10.81.1.47] => (item={'line': 'api_servers = http://controller:9292', 'insaft': '\\[glance\\]'})
+changed: [10.81.1.47] => (item={'line': 'lock_path = /var/lib/nova/tmp', 'insaft': '\\[oslo_concurrency\\]'})
+
+TASK [nova : Configuring Virt_Type] **********************************************************************************************************************************************************
+ok: [10.81.1.47]
+
+TASK [nova : Restarting Nova-Compute Service] ************************************************************************************************************************************************
+changed: [10.81.1.47]
+
+PLAY [controller] ****************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ***********************************************************************************************************************************************************************
+ok: [10.81.1.45]
+
+TASK [horizon : installing openstack-dashboard] **********************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [horizon : setting up conf file] ********************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [horizon : setting up] ******************************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [horizon : setting up conf file] ********************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [horizon : setting up conf file] ********************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [horizon : setting up conf file 2] ******************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [horizon : setting up conf file] ********************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [horizon : setting up conf file] ********************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [horizon : restarting apache] ***********************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [neutron : create DB] *******************************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [neutron : adding user and granting privileges] *****************************************************************************************************************************************
+changed: [10.81.1.45] => (item=localhost)
+changed: [10.81.1.45] => (item=%)
+
+TASK [neutron : creating neutron user, entity and API endpoints] *****************************************************************************************************************************
+changed: [10.81.1.45] => (item=openstack user create --domain default --password 123 neutron)
+changed: [10.81.1.45] => (item=openstack role add --project service --user neutron admin)
+changed: [10.81.1.45] => (item=openstack service create --name neutron --description "OpenStack Networking" network)
+changed: [10.81.1.45] => (item=openstack endpoint create --region RegionOne network public http://controller:9696)
+changed: [10.81.1.45] => (item=openstack endpoint create --region RegionOne network internal http://controller:9696)
+changed: [10.81.1.45] => (item=openstack endpoint create --region RegionOne network admin http://controller:9696)
+
+TASK [neutron : installing neutron components] ***********************************************************************************************************************************************
+changed: [10.81.1.45] => (item=neutron-server)
+ok: [10.81.1.45] => (item=neutron-plugin-ml2)
+changed: [10.81.1.45] => (item=neutron-linuxbridge-agent)
+changed: [10.81.1.45] => (item=neutron-l3-agent)
+changed: [10.81.1.45] => (item=neutron-dhcp-agent)
+ok: [10.81.1.45] => (item=neutron-metadata-agent)
+
+TASK [neutron : configuring server components] ***********************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [neutron : Deleting Default Configuration] **********************************************************************************************************************************************
+changed: [10.81.1.45] => (item=\[DEFAULT\])
+changed: [10.81.1.45] => (item=core_plugin\s+\=\s+ml2)
+
+TASK [neutron : Adding Default Configuration] ************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [neutron : Configuring neutron.conf] ****************************************************************************************************************************************************
+changed: [10.81.1.45] => (item={'blk': 'www_authenticate_uri = http://controller:5000\nauth_url = http://controller:5000\nmemcached_servers = controller:11211\nauth_type = password\nproject_domain_name = default\nuser_domain_name = default\nproject_name = service\nusername = neutron\npassword = 123', 'insaft': '\\[keystone_authtoken\\]'})
+changed: [10.81.1.45] => (item={'blk': 'auth_url = http://controller:5000\nauth_type = password\nproject_domain_name = default\nuser_domain_name = default\nregion_name = RegionOne\nproject_name = service\nusername = nova\npassword = 123', 'insaft': '\\[nova\\]'})
+
+TASK [neutron : oslo_concurrency] ************************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [neutron : Configure the Modular Layer 2 (ML2) plug-in] *********************************************************************************************************************************
+changed: [10.81.1.45] => (item={'blk': 'type_drivers = flat,vlan,vxlan\ntenant_network_types = vxlan\nmechanism_drivers = linuxbridge,l2population\nextension_drivers = port_security', 'insaft': '\\[ml2\\]'})
+changed: [10.81.1.45] => (item={'blk': 'flat_networks = provider\n', 'insaft': '\\[ml2_type_flat\\]'})
+changed: [10.81.1.45] => (item={'blk': 'vni_ranges = 1:1000\n', 'insaft': '\\[ml2_type_vxlan\\]'})
+changed: [10.81.1.45] => (item={'blk': 'enable_ipset = true\n', 'insaft': '\\[securitygroup\\]'})
+
+TASK [neutron : Configure the Modular Layer 2 (ML2) plug-in] *********************************************************************************************************************************
+changed: [10.81.1.45] => (item={'blk': 'physical_interface_mappings = provider:ens6', 'insaft': '\\[linux_bridge\\]'})
+changed: [10.81.1.45] => (item={'blk': 'enable_vxlan = true\nlocal_ip = 172.31.16.179\nl2_population = true', 'insaft': '\\[vxlan\\]'})
+changed: [10.81.1.45] => (item={'blk': 'enable_security_group = true\nfirewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver', 'insaft': '\\[securitygroup\\]'})
+
+TASK [neutron : Deleting Default Configuration] **********************************************************************************************************************************************
+changed: [10.81.1.45] => (item=/etc/neutron/l3_agent.ini)
+changed: [10.81.1.45] => (item=/etc/neutron/dhcp_agent.ini)
+
+TASK [neutron : Configure the layer-3 agent] *************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [neutron : Configure the DHCP agent] ****************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [neutron : Deleting Default Configuration] **********************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [neutron : Configure the metadata agent] ************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [neutron : populating neutron database] *************************************************************************************************************************************************
+changed: [10.81.1.45]
+
+TASK [neutron : Restarting Netwoking Services] ***********************************************************************************************************************************************
+changed: [10.81.1.45] => (item=nova-api)
+changed: [10.81.1.45] => (item=neutron-server)
+changed: [10.81.1.45] => (item=neutron-linuxbridge-agent)
+changed: [10.81.1.45] => (item=neutron-dhcp-agent)
+changed: [10.81.1.45] => (item=neutron-metadata-agent)
+changed: [10.81.1.45] => (item=neutron-l3-agent)
+
+PLAY [compute] *******************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ***********************************************************************************************************************************************************************
+ok: [10.81.1.47]
+
+TASK [neutron : Install the components] ******************************************************************************************************************************************************
+changed: [10.81.1.47]
+
+TASK [neutron : oslo_concurrency] ************************************************************************************************************************************************************
+changed: [10.81.1.47]
+
+TASK [neutron : Deleting Default Configuration] **********************************************************************************************************************************************
+changed: [10.81.1.47] => (item=\[DEFAULT\])
+changed: [10.81.1.47] => (item=core_plugin\s+\=\s+ml2)
+changed: [10.81.1.47] => (item=\[keystone_authtoken\])
+
+TASK [neutron : Adding Default Configuration] ************************************************************************************************************************************************
+changed: [10.81.1.47]
+
+TASK [neutron : Configure the Modular Layer 2 (ML2) plug-in] *********************************************************************************************************************************
+changed: [10.81.1.47] => (item={'blk': 'physical_interface_mappings = provider:virbr0-nic', 'insaft': '\\[linux_bridge\\]'})
+changed: [10.81.1.47] => (item={'blk': 'enable_vxlan = true\nlocal_ip = 172.31.24.229\nl2_population = true', 'insaft': '\\[vxlan\\]'})
+changed: [10.81.1.47] => (item={'blk': 'enable_security_group = true\nfirewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver', 'insaft': '\\[securitygroup\\]'})
+
+TASK [neutron : Restarting Compute and Linux bridge agent service] ***************************************************************************************************************************
+changed: [10.81.1.47] => (item=nova-compute)
+changed: [10.81.1.47] => (item=neutron-linuxbridge-agent)
+
+PLAY RECAP ***********************************************************************************************************************************************************************************
+10.81.1.47 : ok=24   changed=20   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+10.81.1.45 : ok=88   changed=84   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   

@@ -1,0 +1,36 @@
+
+        
+{
+    "command": "/usr/sbin/td-agent -o /var/log/kolla/fluentd/fluentd.log",
+    "config_files": [
+        {
+            "source": "/var/lib/kolla/config_files/td-agent.conf",
+            "dest": "/etc/td-agent/td-agent.conf",
+            "owner": "td-agent",
+            "perm": "0600"
+        }
+    ],
+    "permissions": [
+        {
+            "path": "/var/log/kolla/fluentd",
+            "owner": "td-agent:td-agent",
+            "recurse": true
+        },
+        {
+            "path": "/var/log/kolla/haproxy",
+            "owner": "td-agent:td-agent",
+            "recurse": true
+        },
+        {
+            "path": "/var/log/kolla/swift",
+            "owner": "td-agent:td-agent",
+            "recurse": true
+        },
+        {
+            "path": "/var/lib/fluentd/data",
+            "owner": "td-agent:td-agent",
+            "recurse": true
+        }
+    ]
+
+}

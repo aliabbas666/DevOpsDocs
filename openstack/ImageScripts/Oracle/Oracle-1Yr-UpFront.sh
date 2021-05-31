@@ -1,0 +1,21 @@
+#!/bin/bash
+openstack flavor create  "Oracle 2vCPU 8GB 1Yr UpFront" --vcpus 2 --ram 8
+openstack flavor create  "Oracle 4vCPU 16GB 1Yr UpFront" --vcpus 4 --ram 16
+openstack flavor create  "Oracle 6vCPU 24GB 1Yr UpFront" --vcpus 6 --ram 24
+openstack flavor create  "Oracle 8vCPU 32GB 1Yr UpFront" --vcpus 8 --ram 32
+openstack flavor create  "Oracle 10vCPU 40GB 1Yr UpFront" --vcpus 10 --ram 40
+openstack flavor create  "Oracle 12vCPU 48GB 1Yr UpFront" --vcpus 12 --ram 48
+openstack flavor create  "Oracle 16vCPU 64GB 1Yr UpFront" --vcpus 16 --ram 64
+openstack flavor create  "Oracle 32vCPU 128GB 1Yr UpFront" --vcpus 32 --ram 128
+openstack flavor create  "Oracle 40vCPU 160GB 1Yr UpFront" --vcpus 40 --ram 160
+openstack flavor create  "Oracle 64vCPU 256GB 1Yr UpFront" --vcpus 64 --ram 256
+openstack flavor create  "Oracle 2vCPU 16GB 1Yr UpFront" --vcpus 2 --ram 16
+openstack flavor create  "Oracle 4vCPU 32GB 1Yr UpFront" --vcpus 4 --ram 32
+openstack flavor create  "Oracle 6vCPU 48GB 1Yr UpFront" --vcpus 6 --ram 48
+openstack flavor create  "Oracle 8vCPU 64GB 1Yr UpFront" --vcpus 8 --ram 64
+openstack flavor create  "Oracle 10vCPU 80GB 1Yr UpFront" --vcpus 10 --ram 80
+openstack flavor create  "Oracle 12vCPU 96GB 1Yr UpFront" --vcpus 12 --ram 96
+openstack flavor create  "Oracle 14vCPU 112GB 1Yr UpFront" --vcpus 14 --ram 112
+openstack flavor create  "Oracle 16vCPU 128GB 1Yr UpFront" --vcpus 16 --ram 128
+openstack flavor create  "Oracle 32vCPU 256GB 1Yr UpFront" --vcpus 32 --ram 256
+openstack flavor create  "Oracle 64vCPU 512GB 1Yr UpFront" --vcpus 64 --ram 512

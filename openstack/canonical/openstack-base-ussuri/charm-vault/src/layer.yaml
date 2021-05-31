@@ -1,0 +1,19 @@
+includes:
+ - layer:basic
+ - layer:snap
+ - layer:leadership
+ - interface:nrpe-external-master
+ - interface:pgsql
+ - interface:mysql-shared
+ - interface:etcd
+ - interface:hacluster
+ - interface:vault-kv
+ - interface:tls-certificates
+options:
+  basic:
+    use_venv: True
+    include_system_packages: False
+    packages:
+      - libffi-dev
+      - libpq-dev
+repo: https://opendev.org/openstack/charm-vault.git

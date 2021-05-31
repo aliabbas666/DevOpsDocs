@@ -1,0 +1,11 @@
+fsdisk /dev/sdb
+n
+p
+w
+mkfs.ext4 /dev/sdb1
+mkdir -p /newpartition
+mount /dev/sdb1 /storage
+
+
+
+https://www.cyberciti.biz/faq/howto-add-disk-to-lvm-volume-on-linux-to-increase-size-of-pool/

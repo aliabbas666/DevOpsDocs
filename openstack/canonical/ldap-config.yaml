@@ -1,0 +1,8 @@
+keystone-ldap:
+        ldap-server:"ldap://10.10.10.10/"
+        ldap-user:"cn=admin,dc=test,dc=com"
+        ldap-password:"password"
+        ldap-suffix:"dc=test,dc=com"
+        ldap-config-flags: "{
+                user_tree_dn: 'DC=dc1,DC=ad,DC=example,DC=com'
+                }"

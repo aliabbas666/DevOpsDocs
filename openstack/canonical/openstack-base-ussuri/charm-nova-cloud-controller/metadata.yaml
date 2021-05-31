@@ -1,0 +1,76 @@
+name: nova-cloud-controller
+summary: OpenStack Compute - Nova cloud controller service
+maintainer: OpenStack Charmers <openstack-charmers@lists.ubuntu.com>
+description: |
+  OpenStack is a reliable cloud infrastructure. Its mission is to produce
+  the ubiquitous cloud computing platform that will meet the needs of public
+  and private cloud providers regardless of size, by being simple to implement
+  and massively scalable.
+  .
+  OpenStack Compute, codenamed Nova, is a cloud computing fabric controller. In
+  addition to its "native" API (the OpenStack API), it also supports the Amazon
+  EC2 API.
+  .
+  This charm provides the cloud controller service for OpenStack Nova and includes
+  nova-scheduler, nova-api and nova-conductor services.
+tags:
+- openstack
+series:
+- xenial
+- bionic
+- focal
+- trusty
+- groovy
+extra-bindings:
+  public:
+  admin:
+  internal:
+provides:
+  nrpe-external-master:
+    interface: nrpe-external-master
+    scope: container
+  cloud-controller:
+    interface: nova
+  nova-cell-api:
+    interface: nova-cell
+requires:
+  shared-db:
+    interface: mysql-shared
+  amqp:
+    interface: rabbitmq
+  image-service:
+    interface: glance
+  identity-service:
+    interface: keystone
+  cloud-compute:
+    interface: nova-compute
+  cinder-volume-service:
+    interface: cinder
+  quantum-network-service:
+    interface: quantum
+  neutron-api:
+    interface: neutron-api
+  ha:
+    interface: hacluster
+    scope: container
+  nova-vmware:
+    interface: nova-vmware
+    scope: container
+  memcache:
+    interface: memcache
+  certificates:
+    interface: tls-certificates
+  shared-db-cell:
+    interface: mysql-shared
+  amqp-cell:
+    interface: rabbitmq
+  placement:
+    interface: placement
+peers:
+  cluster:
+    interface: nova-ha
+resources:
+  policyd-override:
+    type: file
+    filename: policyd-override.zip
+    description: The policy.d overrides file

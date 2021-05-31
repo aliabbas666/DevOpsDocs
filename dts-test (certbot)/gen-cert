@@ -1,0 +1,17 @@
+git clone https://github.com/certbot/certbot.git && \
+cd certbot && \
+apt-get install letsencrypt && \
+certbot certonly --manual \
+  --preferred-challenges=dns \
+  --email usman.ghani@ivolve.io \
+  --server https://acme-v02.api.letsencrypt.org/directory \
+  --agree-tos \
+  --manual-public-ip-logging-ok \
+  -d "*.dts-test.com"
+
+
+for certs check /etc/letsencrypt/live/dts-test.com
+  
+source:
+[1] https://marcincuber.medium.com/lets-encrypt-generating-wildcard-ssl-certificate-using-certbot-ae1c9484c101
+[2] https://medium.com/@saurabh6790/generate-wildcard-ssl-certificate-using-lets-encrypt-certbot-273e432794d7

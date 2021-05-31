@@ -1,0 +1,48 @@
+charm_name: ceph-radosgw
+gate_bundles:
+  - vault: groovy-victoria
+  - vault: groovy-victoria-namespaced
+  - vault: focal-victoria
+  - vault: focal-victoria-namespaced
+  - vault: focal-ussuri-ec
+  - vault: focal-ussuri
+  - vault: focal-ussuri-namespaced
+  - vault: bionic-ussuri
+  - vault: bionic-ussuri-namespaced
+  - vault: bionic-train
+  - vault: bionic-train-namespaced
+  - vault: bionic-stein
+  - vault: bionic-stein-namespaced
+  - vault: bionic-rocky
+  - vault: bionic-rocky-namespaced
+  - vault: bionic-queens
+  - vault: bionic-queens-namespaced
+  - vault: xenial-queens
+  - xenial-pike
+  - xenial-ocata
+  - xenial-mitaka
+  - xenial-mitaka-namespaced
+  - trusty-mitaka
+smoke_bundles:
+  - vault: bionic-ussuri
+dev_bundles:
+  - bionic-queens-multisite
+  - bionic-rocky-multisite
+target_deploy_status:
+  vault:
+    workload-status: blocked
+    workload-status-message: Vault needs to be initialized
+configure:
+  - vault:
+    - zaza.openstack.charm_tests.vault.setup.auto_initialize
+tests:
+  - zaza.openstack.charm_tests.ceph.tests.CephRGWTest
+  - vault:
+    - zaza.openstack.charm_tests.ceph.tests.CephRGWTest
+    - zaza.openstack.charm_tests.swift.tests.S3APITest
+    - zaza.openstack.charm_tests.ceph.tests.CheckPoolTypes
+    - zaza.openstack.charm_tests.ceph.tests.BlueStoreCompressionCharmOperation
+tests_options:
+  force_deploy:
+    - groovy-victoria
+    - groovy-victoria-namespaced

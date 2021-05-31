@@ -1,0 +1,6 @@
+bin/
+*.pyc
+.tox
+.testrepository
+.coverage
+.stestr

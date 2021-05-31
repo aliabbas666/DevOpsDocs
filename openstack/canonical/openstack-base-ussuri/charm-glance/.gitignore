@@ -1,0 +1,16 @@
+.coverage
+bin
+tags
+.tox
+.testrepository
+*.sw[nop]
+*.pyc
+.unit-state.db
+tests/*.img
+trusty
+.idea
+.stestr
+func-results.json
+__pycache__
+tempest-workspace
+tempest.log

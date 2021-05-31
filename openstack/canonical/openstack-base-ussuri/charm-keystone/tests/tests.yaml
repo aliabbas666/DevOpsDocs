@@ -1,0 +1,33 @@
+charm_name: keystone
+smoke_bundles:
+- bionic-train
+gate_bundles:
+- groovy-victoria
+- focal-victoria
+- focal-ussuri
+- bionic-ussuri
+- bionic-train
+- bionic-stein
+- bionic-rocky
+- bionic-queens
+- xenial-queens
+- xenial-pike
+- xenial-ocata
+- xenial-mitaka
+- trusty-mitaka
+comment: |
+  the glance configure job validates operation of identity-service relation.
+  The policyd test is generic and validates the policy.d overrides work
+configure:
+- zaza.openstack.charm_tests.glance.setup.add_lts_image
+- zaza.openstack.charm_tests.keystone.setup.add_demo_user
+tests:
+- zaza.openstack.charm_tests.keystone.tests.AuthenticationAuthorizationTest
+- zaza.openstack.charm_tests.keystone.tests.CharmOperationTest
+- zaza.openstack.charm_tests.keystone.tests.SecurityTests
+- zaza.openstack.charm_tests.policyd.tests.KeystoneTests
+tests_options:
+  policyd:
+    service: keystone
+  force_deploy:
+    - groovy-victoria

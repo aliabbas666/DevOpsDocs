@@ -1,0 +1,158 @@
++--------------------------------------------------------------------------------------------+
+|																	    add user																							 |
++--------------------------------------------------------------------------------------------+
+useradd stack
+passwd stack
+echo "stack ALL=(ALL) NOPASSWD:ALL" | tee /etc/sudoers.d/stack
+chmod 0440 /etc/sudoers.d/stack
+su - stack
++--------------------------------------------------------------------------------------------+
+|																	    create directories																		 |
++--------------------------------------------------------------------------------------------+
+mkdir ~/images
+mkdir ~/templates
++--------------------------------------------------------------------------------------------+
+|																	    set hostname																					 |
++--------------------------------------------------------------------------------------------+
+sudo hostnamectl set-hostname director.localdomain
+sudo hostnamectl set-hostname --transient director.localdomain
+sudo echo "127.0.0.1 director.localdomain" >> /etc/hosts
++--------------------------------------------------------------------------------------------+
+|																	    add subsciription																			 |
++--------------------------------------------------------------------------------------------+
+sudo subscription-manager register --username redhat-detcon --password "Bei[g:(M3(kn123"
+sudo subscription-manager list --available --all --matches="Red Hat OpenStack"
+sudo subscription-manager attach --pool=8a85f99a742745340174439cd73d6164 <self-support-pool-id>  
+sudo subscription-manager release --set=8.2
+sudo subscription-manager repos --disable=*
+sudo subscription-manager repos --enable=rhel-8-for-x86_64-baseos-eus-rpms --enable=rhel-8-for-x86_64-appstream-eus-rpms --enable=rhel-8-for-x86_64-highavailability-eus-rpms --enable=ansible-2.9-for-rhel-8-x86_64-rpms --enable=openstack-16.1-for-rhel-8-x86_64-rpms --enable=fast-datapath-for-rhel-8-x86_64-rpms --enable=advanced-virt-for-rhel-8-x86_64-rpms
+sudo dnf module disable -y container-tools:rhel8
+sudo dnf module enable -y container-tools:2.0
+sudo dnf module disable -y virt:rhel
+sudo dnf module enable -y virt:8.2
+sudo dnf update -y
++--------------------------------------------------------------------------------------------+
+|																	    install byobu      																		 |
++--------------------------------------------------------------------------------------------+
+sudo dnf install -y  https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+sudo dnf update -y
+sudo dnf install byobu vim -y
+sudo dnf remove epel-release -y
+sudo dnf update -y
+sudo reboot
++--------------------------------------------------------------------------------------------+
+|															install openstack-client																			 |
++--------------------------------------------------------------------------------------------+
+sudo dnf install -y python3-tripleoclient
++--------------------------------------------------------------------------------------------+
+|					   					    configure & isntall undercloud																		 |
++--------------------------------------------------------------------------------------------+
+openstack tripleo container image prepare default --local-push-destination --output-env-file /home/stack/containers-prepare-parameter.yaml
+cat <<EOF >> /home/stack/containers-prepare-parameter.yaml
+  ContainerImageRegistryCredentials:
+    registry.redhat.io:
+      redhat-detcon: Bei[g:(M3(kn123
+EOF
+
+cp /usr/share/python-tripleoclient/undercloud.conf.sample ~/undercloud.conf
+edit these lines in undercloud.conf
+	container_images_file = /home/stack/containers-prepare-parameter.yaml
+	enabled_hardware_types = manual-management,ipmi,redfish,ilo,idrac
+	local_interface = ens4 (isolated nic)
+	masquerade = true
+
+openstack undercloud install
++--------------------------------------------------------------------------------------------+
+|					   					        import images to director  																		 |
++--------------------------------------------------------------------------------------------+
+source stackrc
+sudo dnf install rhosp-director-images rhosp-director-images-ipa
+cd images
+for i in /usr/share/rhosp-director-images/overcloud-full-latest-16.1.tar /usr/share/rhosp-director-images/ironic-python-agent-latest-16.1.tar; do tar -xvf $i; done
+openstack overcloud image upload --image-path /home/stack/images/
+openstack image list
++--------------------------------------------------------------------------------------------+
+|					   					        add dns for ctlplane      																		 |
++--------------------------------------------------------------------------------------------+
+source stackrc
+openstack subnet set --dns-nameserver 8.8.8.8 ctlplane-subnet
+openstack subnet show ctlplane-subnet | grep dns
+sudo systemctl restart httpd
++--------------------------------------------------------------------------------------------+
+|					   					        configure overcloud env    																		 |
++--------------------------------------------------------------------------------------------+
+cat <<EOF >> ~/node-info.yaml
+parameter_defaults:
+  OvercloudControllerFlavor: control
+  OvercloudComputeFlavor: compute
+  ControllerCount: 1
+  ComputeCount: 1
+EOF
++--------------------------------------------------------------------------------------------+
+|					   		    install vbmc on UC (if using virt-manager)															 |
++--------------------------------------------------------------------------------------------+
+sudo yum install -y libvirt-devel gcc ipmitool
+sudo pip3 install virtualbmc
+vbmcd
+ssh-copy-id root@10.81.1.77
+vbmc add compute --port 6001 --username admin --password password --libvirt-uri qemu+ssh://root@10.81.1.77/system
+vbmc add control --port 6002 --username admin --password password --libvirt-uri qemu+ssh://root@10.81.1.77/system
+vbmc start compute
+vbmc start control
+vbmc list
+
+ipmitool -I lanplus -U admin -P password -H 192.168.24.1 -p 6002 power status
+ipmitool -I lanplus -U admin -P password -H 192.168.24.1 -p 6001 power on
+ipmitool -I lanplus -U admin -P password -H 192.168.24.1 -p 6002 power on
+ipmitool -I lanplus -U admin -P password -H 192.168.24.1 -p 6001 power status
+ipmitool -I lanplus -U admin -P password -H 192.168.24.1 -p 6002 power status
++--------------------------------------------------------------------------------------------+
+|					   		 										 node introspection																			 |
++--------------------------------------------------------------------------------------------+
+cat <<EOF >> ~/instackenv.json
+{
+	"nodes":[
+	  {
+      "mac":[
+          "52:54:00:6c:38:0e"
+      ],
+      "name":"compute",
+      "pm_type":"ipmi",
+      "pm_user":"admin",
+      "pm_password":"password",
+      "pm_addr":"192.168.24.1",
+      "pm_port":"6001"
+	  },
+	  {
+      "mac":[
+          "52:54:00:04:a5:dc"
+      ],
+      "name":"control",
+      "pm_type":"ipmi",
+      "pm_user":"admin",
+      "pm_password":"password",
+      "pm_addr":"192.168.24.1",
+      "pm_port":"6002"
+	  }
+	]
+}
+EOF
+
+openstack overcloud node import --validate-only instackenv.json
+openstack overcloud node import --introspect --provide instackenv.json
+sudo journalctl -l -u openstack-ironic-inspector -u openstack-ironic-inspector-dnsmasq -u openstack-ironic-conductor -f
++--------------------------------------------------------------------------------------------+
+|					   		 										 generate templates																			 |
++--------------------------------------------------------------------------------------------+
+cd /usr/share/openstack-tripleo-heat-templates
+./tools/process-templates.py -o ~/templates
++--------------------------------------------------------------------------------------------+
+|					   		 										 deploy overcloud  																			 |
++--------------------------------------------------------------------------------------------+
+openstack overcloud deploy --templates \
+  -e /home/stack/templates/node-info.yaml\
+  -e /home/stack/containers-prepare-parameter.yaml \
+  -e /home/stack/templates/configure-barbican.yaml \
+  -e /usr/share/openstack-tripleo-heat-templates/environments/services/barbican.yaml \
+  -e /usr/share/openstack-tripleo-heat-templates/environments/barbican-backend-simple-crypto.yaml
+  

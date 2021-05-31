@@ -1,0 +1,7 @@
+grep -Eoc '(vmx|svm)' /proc/cpuinfo && sudo apt update && sudo apt install cpu-checker && kvm-ok && sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virtinst virt-manager && sudo systemctl is-active libvirtd && sudo usermod -aG libvirt $USER && sudo usermod -aG kvm $USER && sudo snap install --channel=2.9/stable maas && sudo snap install maas-test-db && sudo maas init region+rack --database-uri maas-test-db:///
+
+sudo snap install --classic juju
+sudo snap install vault
+
+
+sudo apt update -y && sudo snap install maas-test-db && sudo snap install maas --channel=2.9/stable && sudo maas init region+rack --maas-url http://10.82.3.32:5240/MAAS --database-uri maas-test-db:/// && sudo maas createadmin --username admin --password letmein --email mghani828@gmail.com && sudo snap install juju --classic

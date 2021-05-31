@@ -1,0 +1,480 @@
+﻿applications:
+  ceph-mon:
+    charm: 'cs:ceph-mon-53'
+    num_units: 3
+    options:
+      expected-osd-count: 72
+      source: 'cloud:focal-victoria'
+    series: focal
+    annotations:
+      gui-x: '790'
+      gui-y: '1540'
+    to:
+      - 'lxd:13'
+      - 'lxd:14'
+      - 'lxd:15'
+  ceph-osd:
+    charm: 'cs:ceph-osd-308'
+    num_units: 3
+    options:
+      osd-devices: >-
+         /dev/nvme0n1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1 /dev/nvme4n1
+         /dev/nvme5n1 /dev/nvme6n1 /dev/nvme7n1 /dev/nvme8n1 /dev/nvme9n1
+         /dev/nvme10n1 /dev/nvme11n1 /dev/nvme12n1 /dev/nvme13n1 /dev/nvme14n1
+         /dev/nvme15n1 /dev/nvme16n1 /dev/nvme17n1 /dev/nvme18n1 /dev/nvme19n1
+         /dev/nvme20n1 /dev/nvme21n1 /dev/nvme22n1 /dev/nvme23n1 
+      source: 'cloud:focal-victoria'
+    series: focal
+    annotations:
+      gui-x: '1065'
+      gui-y: '1540'
+    to:
+      - '13'
+      - '14'
+      - '15'
+  ceph-radosgw:
+    charm: 'cs:ceph-radosgw-294'
+    num_units: 1 
+    options:
+      dns-ha: true
+      source: 'cloud:focal-victoria'
+    series: focal
+    annotations:
+      gui-x: '850'
+      gui-y: '900'
+    to:
+      - 'lxd:1'
+      - 'lxd:2'
+      - 'lxd:3'
+  cinder:
+    charm: 'cs:cinder-308'
+    num_units: 3
+    options:
+      dns-ha: true
+      block-device: None
+      glance-api-version: 2
+      openstack-origin: 'cloud:focal-victoria'
+      worker-multiplier: 0.25
+    series: focal
+    annotations:
+      gui-x: '980'
+      gui-y: '1270'
+    to:
+      - 'lxd:1'
+      - 'lxd:2'
+      - 'lxd:3'
+  cinder-ceph:
+    charm: 'cs:cinder-ceph-260'
+    series: focal
+    annotations:
+      gui-x: 376.1919250488281
+      gui-y: 443.6754150390625
+  cinder-mysql-router:
+    charm: 'cs:mysql-router-6'
+    series: focal
+    annotations:
+      gui-x: '900'
+      gui-y: '1400'
+  dashboard-mysql-router:
+    charm: 'cs:mysql-router-6'
+    series: focal
+    annotations:
+      gui-x: '510'
+      gui-y: '1030'
+  glance:
+    charm: 'cs:glance-303'
+    num_units: 3
+    options:
+      dns-ha: true
+      openstack-origin: 'cloud:focal-victoria'
+      worker-multiplier: 0.25
+    series: focal
+    annotations:
+      gui-x: '-230'
+      gui-y: '1270'
+    to:
+      - 'lxd:1'
+      - 'lxd:2'
+      - 'lxd:3'
+  glance-mysql-router:
+    charm: 'cs:mysql-router-6'
+    series: focal
+    annotations:
+      gui-x: '-290'
+      gui-y: '1400'
+  keystone:
+    charm: 'cs:keystone-321'
+    num_units: 3
+    options:
+      admin-password: letmein
+      dns-ha: true
+      openstack-origin: 'cloud:focal-victoria'
+      worker-multiplier: 0.25
+    series: focal
+    annotations:
+      gui-x: '300'
+      gui-y: '1270'
+    to:
+      - 'lxd:1'
+      - 'lxd:2'
+      - 'lxd:3'
+  keystone-mysql-router:
+    charm: 'cs:mysql-router-6'
+    series: focal
+    annotations:
+      gui-x: '230'
+      gui-y: '1400'
+  mysql-innodb-cluster:
+    charm: 'cs:mysql-innodb-cluster-5'
+    num_units: 3
+    series: focal
+    annotations:
+      gui-x: '535'
+      gui-y: '1550'
+    to:
+      - 'lxd:1'
+      - 'lxd:2'
+      - 'lxd:3'
+  neutron-api:
+    charm: 'cs:neutron-api-292'
+    num_units: 3
+    options:
+      allow-automatic-l3agent-failover: true
+      dns-ha: true
+      enable-dvr: true
+      enable-l3ha: true
+      enable-ml2-dns: true
+      enable-port-forwarding: true
+      flat-network-providers: physnet1
+      neutron-security-groups: true
+      openstack-origin: 'cloud:focal-victoria'
+      worker-multiplier: 0.25
+    series: focal
+    annotations:
+      gui-x: '580'
+      gui-y: '1270'
+    to:
+      - 'lxd:1'
+      - 'lxd:2'
+      - 'lxd:3'
+  neutron-api-plugin-ovn:
+    charm: 'cs:neutron-api-plugin-ovn-4'
+    series: focal
+    annotations:
+      gui-x: '690'
+      gui-y: '1385'
+  neutron-mysql-router:
+    charm: 'cs:mysql-router-6'
+    series: focal
+    annotations:
+      gui-x: '505'
+      gui-y: '1385'
+  nova-cloud-controller:
+    charm: 'cs:nova-cloud-controller-352'
+    num_units: 3
+    options:
+      dns-ha: true
+      enable-serial-console: true
+      network-manager: Neutron
+      openstack-origin: 'cloud:focal-victoria'
+      worker-multiplier: 0.25
+    series: focal
+    annotations:
+      gui-x: '35'
+      gui-y: '1270'
+    to:
+      - 'lxd:1'
+      - 'lxd:2'
+      - 'lxd:3'
+  nova-compute:
+    charm: 'cs:nova-compute-325'
+    num_units: 9
+    options:
+      config-flags: default_ephemeral_format=ext4
+      enable-live-migration: true
+      enable-resize: true
+      openstack-origin: 'cloud:focal-victoria'
+    series: focal
+    annotations:
+      gui-x: '190'
+      gui-y: '890'
+    to:
+      - '4'
+      - '5'
+      - '6'
+      - '7'
+      - '8'
+      - '9'
+      - '10'
+      - '11'
+      - '12'
+  nova-mysql-router:
+    charm: 'cs:mysql-router-6'
+    series: focal
+    annotations:
+      gui-x: '-30'
+      gui-y: '1385'
+  ntp:
+    charm: 'cs:ntp-44'
+    series: focal
+    annotations:
+      gui-x: '315'
+      gui-y: '1030'
+  openstack-dashboard:
+    charm: 'cs:openstack-dashboard-311'
+    num_units: 3
+    options:
+      allow-password-autocompletion: true
+      dns-ha: true
+      neutron-network-dvr: true
+      neutron-network-firewall: true
+      neutron-network-l3ha: true
+      openstack-origin: 'cloud:focal-victoria'
+      password-retrieve: true
+    series: focal
+    annotations:
+      gui-x: '585'
+      gui-y: '900'
+    to:
+      - 'lxd:1'
+      - 'lxd:2'
+      - 'lxd:3'
+  ovn-central:
+    charm: 'cs:ovn-central-5'
+    num_units: 3
+    options:
+      source: 'cloud:focal-victoria'
+    series: focal
+    annotations:
+      gui-x: '70'
+      gui-y: '1550'
+    to:
+      - 'lxd:1'
+      - 'lxd:2'
+      - 'lxd:3'
+  ovn-chassis:
+    charm: 'cs:ovn-chassis-10'
+    options:
+      bridge-interface-mappings: 'br-ex:ens35f0'
+      ovn-bridge-mappings: 'physnet1:br-ex'
+    series: focal
+    annotations:
+      gui-x: '120'
+      gui-y: '1030'
+  placement:
+    charm: 'cs:placement-17'
+    num_units: 3
+    options:
+      dns-ha: true
+      openstack-origin: 'cloud:focal-victoria'
+      worker-multiplier: 0.25
+    series: focal
+    annotations:
+      gui-x: '1320'
+      gui-y: '1270'
+    to:
+      - 'lxd:1'
+      - 'lxd:2'
+      - 'lxd:3'
+  placement-mysql-router:
+    charm: 'cs:mysql-router-6'
+    series: focal
+    annotations:
+      gui-x: '1320'
+      gui-y: '1385'
+  rabbitmq-server:
+    charm: 'cs:rabbitmq-server-108'
+    num_units: 3
+    series: focal
+    annotations:
+      gui-x: '300'
+      gui-y: '1550'
+    to:
+      - 'lxd:1'
+      - 'lxd:2'
+      - 'lxd:3'
+  vault:
+    charm: 'cs:vault-44'
+    num_units: 3
+    options:
+      auto-generate-root-ca-cert: true
+      totally-unsecure-auto-unlock: true
+    series: focal
+    annotations:
+      gui-x: '1610'
+      gui-y: '1430'
+    to:
+      - 'lxd:1'
+      - 'lxd:2'
+      - 'lxd:3'
+  vault-mysql-router:
+    charm: 'cs:mysql-router-6'
+    series: focal
+    annotations:
+      gui-x: '1535'
+      gui-y: '1560'
+relations:
+  - - 'nova-compute:amqp'
+    - 'rabbitmq-server:amqp'
+  - - 'nova-cloud-controller:identity-service'
+    - 'keystone:identity-service'
+  - - 'glance:identity-service'
+    - 'keystone:identity-service'
+  - - 'neutron-api:identity-service'
+    - 'keystone:identity-service'
+  - - 'neutron-api:amqp'
+    - 'rabbitmq-server:amqp'
+  - - 'glance:amqp'
+    - 'rabbitmq-server:amqp'
+  - - 'nova-cloud-controller:image-service'
+    - 'glance:image-service'
+  - - 'nova-compute:image-service'
+    - 'glance:image-service'
+  - - 'nova-cloud-controller:cloud-compute'
+    - 'nova-compute:cloud-compute'
+  - - 'nova-cloud-controller:amqp'
+    - 'rabbitmq-server:amqp'
+  - - 'openstack-dashboard:identity-service'
+    - 'keystone:identity-service'
+  - - 'nova-cloud-controller:neutron-api'
+    - 'neutron-api:neutron-api'
+  - - 'cinder:image-service'
+    - 'glance:image-service'
+  - - 'cinder:amqp'
+    - 'rabbitmq-server:amqp'
+  - - 'cinder:identity-service'
+    - 'keystone:identity-service'
+  - - 'cinder:cinder-volume-service'
+    - 'nova-cloud-controller:cinder-volume-service'
+  - - 'cinder-ceph:storage-backend'
+    - 'cinder:storage-backend'
+  - - 'ceph-mon:client'
+    - 'nova-compute:ceph'
+  - - 'nova-compute:ceph-access'
+    - 'cinder-ceph:ceph-access'
+  - - 'ceph-mon:client'
+    - 'cinder-ceph:ceph'
+  - - 'ceph-mon:client'
+    - 'glance:ceph'
+  - - 'ceph-osd:mon'
+    - 'ceph-mon:osd'
+  - - 'ntp:juju-info'
+    - 'nova-compute:juju-info'
+  - - 'ceph-radosgw:mon'
+    - 'ceph-mon:radosgw'
+  - - 'ceph-radosgw:identity-service'
+    - 'keystone:identity-service'
+  - - 'placement'
+    - 'keystone'
+  - - 'placement'
+    - 'nova-cloud-controller'
+  - - 'keystone:shared-db'
+    - 'keystone-mysql-router:shared-db'
+  - - 'cinder:shared-db'
+    - 'cinder-mysql-router:shared-db'
+  - - 'glance:shared-db'
+    - 'glance-mysql-router:shared-db'
+  - - 'nova-cloud-controller:shared-db'
+    - 'nova-mysql-router:shared-db'
+  - - 'neutron-api:shared-db'
+    - 'neutron-mysql-router:shared-db'
+  - - 'openstack-dashboard:shared-db'
+    - 'dashboard-mysql-router:shared-db'
+  - - 'placement:shared-db'
+    - 'placement-mysql-router:shared-db'
+  - - 'vault:shared-db'
+    - 'vault-mysql-router:shared-db'
+  - - 'keystone-mysql-router:db-router'
+    - 'mysql-innodb-cluster:db-router'
+  - - 'cinder-mysql-router:db-router'
+    - 'mysql-innodb-cluster:db-router'
+  - - 'nova-mysql-router:db-router'
+    - 'mysql-innodb-cluster:db-router'
+  - - 'glance-mysql-router:db-router'
+    - 'mysql-innodb-cluster:db-router'
+  - - 'neutron-mysql-router:db-router'
+    - 'mysql-innodb-cluster:db-router'
+  - - 'dashboard-mysql-router:db-router'
+    - 'mysql-innodb-cluster:db-router'
+  - - 'placement-mysql-router:db-router'
+    - 'mysql-innodb-cluster:db-router'
+  - - 'vault-mysql-router:db-router'
+    - 'mysql-innodb-cluster:db-router'
+  - - 'neutron-api-plugin-ovn:neutron-plugin'
+    - 'neutron-api:neutron-plugin-api-subordinate'
+  - - 'ovn-central:certificates'
+    - 'vault:certificates'
+  - - 'ovn-central:ovsdb-cms'
+    - 'neutron-api-plugin-ovn:ovsdb-cms'
+  - - 'neutron-api:certificates'
+    - 'vault:certificates'
+  - - 'ovn-chassis:nova-compute'
+    - 'nova-compute:neutron-plugin'
+  - - 'ovn-chassis:certificates'
+    - 'vault:certificates'
+  - - 'ovn-chassis:ovsdb'
+    - 'ovn-central:ovsdb'
+  - - 'vault:certificates'
+    - 'neutron-api-plugin-ovn:certificates'
+  - - 'vault:certificates'
+    - 'cinder:certificates'
+  - - 'vault:certificates'
+    - 'glance:certificates'
+  - - 'vault:certificates'
+    - 'keystone:certificates'
+  - - 'vault:certificates'
+    - 'nova-cloud-controller:certificates'
+  - - 'vault:certificates'
+    - 'openstack-dashboard:certificates'
+  - - 'vault:certificates'
+    - 'placement:certificates'
+  - - 'vault:certificates'
+    - 'ceph-radosgw:certificates'
+  - - 'vault:certificates'
+    - 'mysql-innodb-cluster:certificates'
+machines:
+  '1': 
+    series: focal
+    constraints: tags=controller-1
+  '2': 
+    series: focal
+    constraints: tags=controller-2
+  '3': 
+    series: focal
+    constraints: tags=controller-3
+  '4': 
+    series: focal
+    constraints: tags=compute-1
+  '5': 
+    series: focal
+    constraints: tags=compute-2
+  '6': 
+    series: focal
+    constraints: tags=compute-3
+  '7': 
+    series: focal
+    constraints: tags=compute-4
+  '8': 
+    series: focal
+    constraints: tags=compute-5
+  '9': 
+    series: focal
+    constraints: tags=compute-6
+  '10': 
+    series: focal
+    constraints: tags=compute-7
+  '11': 
+    series: focal
+    constraints: tags=compute-8
+  '12': 
+    series: focal
+    constraints: tags=compute-9
+  '13': 
+    series: focal
+    constraints: tags=storage-1
+  '14': 
+    series: focal
+    constraints: tags=storage-2
+  '15': 
+    series: focal
+    constraints: tags=storage-3  

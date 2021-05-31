@@ -1,0 +1,61 @@
+name: cinder
+summary: OpenStack block storage service
+maintainer: OpenStack Charmers <openstack-charmers@lists.ubuntu.com>
+description: |
+  Cinder is the block storage service for the OpenStack.
+tags:
+- openstack
+- storage
+- misc
+series:
+- xenial
+- bionic
+- focal
+- trusty
+- groovy
+extra-bindings:
+  public:
+  admin:
+  internal:
+provides:
+  nrpe-external-master:
+    interface: nrpe-external-master
+    scope: container
+  cinder-volume-service:
+    interface: cinder
+requires:
+  shared-db:
+    interface: mysql-shared
+  amqp:
+    interface: rabbitmq
+  identity-service:
+    interface: keystone
+  ceph:
+    interface: ceph-client
+  image-service:
+    interface: glance
+  ha:
+    interface: hacluster
+    scope: container
+  storage-backend:
+    interface: cinder-backend
+    scope: container
+  backup-backend:
+    interface: cinder-backup
+    scope: container
+  certificates:
+    interface: tls-certificates
+peers:
+  cluster:
+    interface: cinder-ha
+resources:
+  policyd-override:
+    type: file
+    filename: policyd-override.zip
+    description: The policy.d overrides file
+storage:
+  block-devices:
+    type: block
+    multiple:
+      range: 0-
+    minimum-size: 10G

@@ -1,0 +1,22 @@
+kafka-topics --zookeeper <zookeeper_host>:<zookeeper_port> --topic <topic_name> --create --partitions <partition_count> --replication-factor <replica_count>
+
+kafka-topics --zookeeper <zookeeper_host>:<zookeeper_port> --list
+
+kafka-topics --zookeeper <zookeeper_host>:<zookeeper_port> --topic <topic_name> --describe
+
+kafka-topics --zookeeper <zookeeper_host>:<zookeeper_port> --topic <topic_name> --delete
+===============================================================================
+kafka-console-producer --broker-list <kafka_host>:<kafka_port> --topic <topic_name>
+
+kafka-console-producer --broker-list <kafka_host>:<kafka_port> --topic <topic_name> --acks=[all/1/0]
+===============================================================================
+kafka-console-consumer --bootstrap-server <kafka_host>:<kafka_port> --topic <topic_name>  //only read real time msg stream
+
+kafka-console-consumer --bootstrap-server <kafka_host>:<kafka_port> --topic <topic_name>  --from-beginning //read all messages
+
+kafka-console-consumer --bootstrap-server <kafka_host>:<kafka_port> --topic <topic_name> --group <consimer_group_name>
+===============================================================================
+kafka-consumer-groups --bootstap-server <kafka_host>:<kafka_port> --list
+
+kafka-consumer-groups --bootstap-server <kafka_host>:<kafka_port> --descibe --group <consumer_group_name>
+
