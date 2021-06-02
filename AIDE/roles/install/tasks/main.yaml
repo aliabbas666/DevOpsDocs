@@ -35,7 +35,7 @@
       !/usr
       !/var
       ### Add path to files to check ###
-      /etc/ Full
+      /etc Full
 
 - name: Updating Config File
   command: "{{item}}"

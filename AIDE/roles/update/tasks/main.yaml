@@ -1,7 +1,7 @@
 - name: Updating FIM Databse
   command: aide -c /etc/aide/aide.conf --update
   register: output
-  failed_when: output.rc != 0 and output.rc != 1 and output != 2 and output.rc != 4 and output.rc != 7
+  failed_when: output.rc != 0 and output.rc != 1 and output != 2 and output.rc != 4 and output.rc != 5 and output.rc != 7
   changed_when: output.rc == 1 or output == 2 or output.rc == 4
 
 - name: Copying Databases

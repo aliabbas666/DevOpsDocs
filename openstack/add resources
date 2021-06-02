@@ -2,11 +2,9 @@
 																	    create image
 ============================================================================================
 
-openstack image create "windows2012" --property hypervisor_type=hyperv --property hw_machine_type="hyperv-gen2" --file windows_server_2012_r2_standard_eval_hyperv_20170321.vhdx --disk-format vhd --container-format bare --public
+openstack image create "windows2012" --property os_type=windows  --property os_secure_boot=required --property hypervisor_type=hyperv --property hw_machine_type="hyperv-gen2" --file win2012-gen2.vhdx --disk-format vhd --container-format bare --public
 
-openstack image set     --property hw_machine_type=hyperv-gen2 --property os_type=windows  --property os_secure_boot=required 
-
-glance image-create --property hypervisor_type=hyperv --name "Windows Server 2012 R2 Std Eval" --container-format bare --disk-format vhd
+openstack image create "centos7"  --property os_secure_boot=disabled --property hypervisor_type=hyperv --property hw_machine_type="hyperv-gen2" --file centos7-gen2.vhdx --disk-format vhd --container-format bare --public
   
 ============================================================================================
 																	    add/edit image tag
