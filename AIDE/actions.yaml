@@ -1,3 +1,4 @@
 install: Y
+alerts: Y
 update: N
 check: N

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jnlp spec="1.0+" codebase="https://10.10.110.26:443/Java">
+     <information>
+        <title>JViewer</title>
+        <vendor>American Megatrends, Inc.</vendor>
+        <description kind="one-line">JViewer Console Redirection Application</description>
+        <description kind="tooltip">JViewer Console Redirection Application</description>
+        <description kind="short">
+            JViewer enables a user to view the video display of managed server via KVM.  
+            It also enables the user to redirect his local keyboard, mouse for managing the server remotely.
+        </description>
+    </information>
+	<security>
+		<all-permissions/>
+	</security>
+	<resources>
+		<j2se version="1.5* 1.6*" initial-heap-size="100m" max-heap-size="256m"/>
+	</resources>
+    <resources>
+        <j2se version="1.5+"/>
+        <jar href="release/JViewer.jar"/>
+    </resources>
+    <resources>
+        <j2se version="1.5+"/>
+        <jar href="release/JViewer-SOC.jar"/>
+    </resources>
+    <resources>
+        <j2se version="1.5+"/>
+        <jar href="release/JViewer-OEM.jar"/>
+    </resources>
+    <resources>
+        <j2se version="1.5+"/>
+        <jar href="release/JViewer-AVIStream.jar"/>
+    </resources>
+    <resources os="Windows" arch="x86">
+    	<j2se version="1.5+"/>
+    	<nativelib href="release/Win32.jar"/>
+    </resources>    
+    <resources os="Windows" arch="amd64">
+           <j2se version="1.5+"/>
+           <nativelib href="release/Win64.jar"/>
+    </resources>
+    <resources os="Linux" arch="x86">
+    	<j2se version="1.5+"/>
+    	<nativelib href="release/Linux_x86_32.jar"/>
+    </resources>    
+    <resources os="Linux" arch="i386">
+    	<j2se version="1.5+"/>
+    	<nativelib href="release/Linux_x86_32.jar"/>
+    </resources>    
+	<resources os="Linux" arch="x86_64">
+	 	<j2se version="1.5+"/>
+    	<nativelib href="release/Linux_x86_64.jar"/>
+	</resources>	
+	<resources os="Linux" arch="amd64">
+	 	<j2se version="1.5+"/>
+    	<nativelib href="release/Linux_x86_64.jar"/>
+	</resources>
+    <resources os="Mac OS X" arch="i386">
+	<j2se version="1.5+"/>
+	<nativelib href="release/Mac32.jar"/>
+    </resources> 
+    <resources os="Mac OS X" arch="x86_64">
+	<j2se version="1.5+"/>
+	<nativelib href="release/Mac64.jar"/>
+    </resources> 
+    <application-desc>
+       <argument>-apptype</argument>
+<argument>JViewer</argument>
+<argument>-hostname</argument>
+<argument>10.10.110.26</argument>
+<argument>-kvmtoken</argument>
+<argument>wfYnitJrbyXAvXmR</argument>
+<argument>-kvmsecure</argument>
+<argument>0</argument>
+<argument>-kvmport</argument>
+<argument>7578</argument>
+<argument>-vmsecure</argument>
+<argument>0</argument>
+<argument>-cdstate</argument>
+<argument>1</argument>
+<argument>-fdstate</argument>
+<argument>1</argument>
+<argument>-hdstate</argument>
+<argument>1</argument>
+<argument>-cdport</argument>
+<argument>5120</argument>
+<argument>-fdport</argument>
+<argument>5122</argument>
+<argument>-hdport</argument>
+<argument>5123</argument>
+<argument>-cdnum</argument>
+<argument>1</argument>
+<argument>-fdnum</argument>
+<argument>1</argument>
+<argument>-hdnum</argument>
+<argument>1</argument>
+<argument>-singleportenabled</argument>
+<argument>0</argument>
+<argument>-extendedpriv</argument>
+<argument>259</argument>
+<argument>-keyboardlayout</argument>
+<argument>AD</argument>
+<argument>-localization</argument>
+<argument>EN</argument>
+<argument>-retrycount</argument>
+<argument>12</argument>
+<argument>-retryinterval</argument>
+<argument>10</argument>
+<argument>-kvmcdnum</argument>
+<argument>1</argument>
+<argument>-kvmfdnum</argument>
+<argument>1</argument>
+<argument>-kvmhdnum</argument>
+<argument>1</argument>
+<argument>-powersavemode</argument>
+<argument>0</argument>
+<argument>-webport</argument>
+<argument>443</argument>
+<argument>-websecure</argument>
+<argument>1</argument>
+<argument>-webcookie</argument>
+<argument>81dc4a615815b9a7feYTDDV9x2YaoF</argument>
+<argument>-oemfeatures</argument>
+<argument>232</argument>
+
+    </application-desc>
+</jnlp>

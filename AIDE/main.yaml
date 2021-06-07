@@ -11,6 +11,11 @@
       include_role:
         name: install
       when: "install == 'Y'"
+
+    - name: Adding Alerts Role
+      include_role:
+        name: alerts
+      when: " alerts == 'Y'"
     
     - name: Adding Aide Update Role
       include_role:

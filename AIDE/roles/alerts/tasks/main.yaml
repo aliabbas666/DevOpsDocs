@@ -1,0 +1,30 @@
+- name: Configuring Alerts
+  lineinfile:
+    path: /etc/postfix/main.cf
+    line: "relayhost = "
+    state: absent
+
+- name: Configuring Alerts
+  blockinfile:
+    path: /etc/postfix/main.cf
+    block: |
+      relayhost = [smtp.gmail.com]:587
+      smtp_sasl_auth_enable = yes
+      smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+      smtp_sasl_security_options = noanonymous
+      smtp_use_tls = yes
+
+- name: Adding Credentials
+  copy:
+    dest: "/etc/postfix/sasl_passwd"
+    content: |
+      [smtp.gmail.com]:587    mghani828@gmail.com:Jx2pn407z
+
+- name: Changing Permissions
+  command: "{{item}}"
+  loop:
+    - chmod 400 /etc/postfix/sasl_passwd
+    - postmap /etc/postfix/sasl_passwd
+
+- name: Restarting Postfix
+  command: /etc/init.d/postfix reload
